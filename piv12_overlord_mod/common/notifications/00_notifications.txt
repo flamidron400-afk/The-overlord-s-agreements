@@ -1,0 +1,5 @@
+agreement_proposal_notification = {
+    texture = "overlordcontractchange"
+    sound = "event_notification"
+    right_click_event = { id = piv12.1005 }
+}

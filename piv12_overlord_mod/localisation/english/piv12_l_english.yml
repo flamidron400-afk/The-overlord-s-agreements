@@ -1,0 +1,335 @@
+﻿l_english:
+
+ # =====================================================
+ # NOTIFICATION
+ # =====================================================
+
+ PIV12_NOTIFICATION_TITLE:0 "Agreement Change Demand"
+ PIV12_NOTIFICATION_TEXT:0 "§Y$OVERLORD$§! demands revised agreement terms.\n§HLeft-click§! to review. §HRight-click§! to refuse (§R-25 £influence£§!)."
+
+ # Subject icon fallbacks (mirrors vanilla keys)
+ text_icon_preset_vassal:0 "£vassal£"
+ text_icon_preset_bulwark:0 "£bulwark£"
+ text_icon_preset_scholarium:0 "£scholarium£"
+ text_icon_preset_prospectorium:0 "£prospectorium£"
+ text_icon_preset_subsidiary:0 "£subsidiary£"
+
+ # =====================================================
+ # PIV12 - Titles and Headers
+ # =====================================================
+
+ piv12_event_title:0 "§Y[From.GetName] Proposes New Agreement Terms§!"
+ piv12_event_full_desc:0 "[GetPiv12Reason]$piv12_spec_header$[GetPiv12SpecRow][GetPiv12SpecProposed][GetPiv12BasicRow][GetPiv12AdvRow][GetPiv12ResRow][GetPiv12StratRow][GetPiv12HoldRow][GetPiv12DiplFreeRow][GetPiv12ExpandRow][GetPiv12OvWarRow][GetPiv12SubWarRow][GetPiv12IntegRow][GetPiv12SensorRow]$piv12_footer$"
+
+ # =====================================================
+ # FLAVOR DESCRIPTIONS
+ # =====================================================
+
+ piv12_desc_crisis:0 "§WA diplomatic envoy from §Y[From.GetName]§! arrives with urgent dispatches.\n\n§RThe galaxy faces an existential threat. Total mobilization is required.§!\n\nThe envoy speaks without warmth:\n\n§E\"Revise your terms or be left behind when the darkness comes.\"§!\n\n"
+ piv12_desc_war:0 "§WA military liaison from §Y[From.GetName]§! approaches, bearing marks of recent combat.\n\n§RThe drums of war echo across our shared borders.§!\n\nThe war effort requires more than words:\n\n§E\"Review these revised terms carefully — the alternative is irrelevance.\"§!\n\n"
+ piv12_desc_loyalty:0 "§WA diplomatic officer from §Y[From.GetName]§! approaches with measured concern.\n\nYour loyalty readings have been... noted.\n\n§E\"We see the drift in your commitment. These revised terms are a gesture of good faith — we expect one in return.\"§!\n\n"
+ piv12_desc_rich:0 "§WA financial auditor from §Y[From.GetName]§! arrives with comprehensive economic reports.\n\nYour economic output has attracted administrative attention.\n\n§E\"You have grown prosperous under our protection. Your contribution must reflect your standing.\"§!\n\n"
+ piv12_desc_strategic:0 "§WA strategic resource analyst from §Y[From.GetName]§! arrives with secure data-slates.\n\nIntelligence reports indicate valuable strategic resources under your control.\n\n§E\"Your rare materials represent a significant strategic asset. Revised terms will ensure proper utilization.\"§!\n\n"
+ piv12_desc_opt:0 "§WA bureaucratic liaison from §Y[From.GetName]§! arrives with routine efficiency reports.\n\nA periodic assessment of subject contracts has been completed:\n\n§E\"We are revising agreements across the board. Yours is next. Review the proposed terms.\"§!\n\n"
+
+ # =====================================================
+ # CONTRACT COMPARISON TABLE
+ # §C = bright cyan (UNCHANGED / current same as proposed)
+ # §S = light orange (CHANGED proposed value)
+ # §L = beige (arrows)
+ # §H = grey (divider lines)
+ # =====================================================
+
+ piv12_spec_header:0 "\n§H=============== CONTRACT CHANGES ===============§!\n"
+
+ # ---- SPECIALIZATION CURRENT ----
+ piv12_spec_none_current_c:0 "§H-------------------------------------------------§!\n§WSubject Type§!  $text_icon_preset_vassal$        §CStandard Vassal§!"
+ piv12_spec_none_current_y:0 "§H-------------------------------------------------§!\n§WSubject Type§!  $text_icon_preset_vassal$        §CStandard Vassal§!"
+ piv12_spec_bulwark_current_c:0 "§H-------------------------------------------------§!\n§WSubject Type§!  $text_icon_preset_bulwark$        §CBulwark§!"
+ piv12_spec_bulwark_current_y:0 "§H-------------------------------------------------§!\n§WSubject Type§!  $text_icon_preset_bulwark$        §CBulwark§!"
+ piv12_spec_prosp_current_c:0 "§H-------------------------------------------------§!\n§WSubject Type§!  $text_icon_preset_prospectorium$        §CProspectorium§!"
+ piv12_spec_prosp_current_y:0 "§H-------------------------------------------------§!\n§WSubject Type§!  $text_icon_preset_prospectorium$        §CProspectorium§!"
+ piv12_spec_schol_current_c:0 "§H-------------------------------------------------§!\n§WSubject Type§!  $text_icon_preset_scholarium$        §CScholarium§!"
+ piv12_spec_schol_current_y:0 "§H-------------------------------------------------§!\n§WSubject Type§!  $text_icon_preset_scholarium$        §CScholarium§!"
+ piv12_spec_subsidiary_current_c:0 "§H-------------------------------------------------§!\n§WSubject Type§!  $text_icon_preset_subsidiary$        §CSubsidiary§!"
+ piv12_spec_subsidiary_current_y:0 "§H-------------------------------------------------§!\n§WSubject Type§!  $text_icon_preset_subsidiary$        §CSubsidiary§!"
+
+ # ---- SPECIALIZATION PROPOSED ----
+ piv12_spec_none_proposed_c:0 "  §L->§!  $text_icon_preset_vassal$ §CStandard Vassal§!\n"
+ piv12_spec_none_proposed_y:0 "  §L->§!  $text_icon_preset_vassal$ §SStandard Vassal§!\n"
+ piv12_spec_bulwark_proposed_c:0 "  §L->§!  $text_icon_preset_bulwark$ §CBulwark§!\n"
+ piv12_spec_bulwark_proposed_y:0 "  §L->§!  $text_icon_preset_bulwark$ §SBulwark§!\n"
+ piv12_spec_prosp_proposed_c:0 "  §L->§!  $text_icon_preset_prospectorium$ §CProspectorium§!\n"
+ piv12_spec_prosp_proposed_y:0 "  §L->§!  $text_icon_preset_prospectorium$ §SProspectorium§!\n"
+ piv12_spec_schol_proposed_c:0 "  §L->§!  $text_icon_preset_scholarium$ §CScholarium§!\n"
+ piv12_spec_schol_proposed_y:0 "  §L->§!  $text_icon_preset_scholarium$ §SScholarium§!\n"
+ piv12_spec_subsidiary_proposed_c:0 "  §L->§!  $text_icon_preset_subsidiary$ §CSubsidiary§!\n"
+ piv12_spec_subsidiary_proposed_y:0 "  §L->§!  $text_icon_preset_subsidiary$ §SSubsidiary§!\n"
+
+ # ---- BASIC RESOURCES ----
+ piv12_row_basic_0_to_same:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C0%§!  §L->§!  §C0%§!\n"
+ piv12_row_basic_0_to_1:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C0%§!  §L->§!  §S+15%§!\n"
+ piv12_row_basic_0_to_2:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C0%§!  §L->§!  §S+30%§!\n"
+ piv12_row_basic_0_to_3:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C0%§!  §L->§!  §S+45%§!\n"
+ piv12_row_basic_1_to_same:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C+15%§!  §L->§!  §C+15%§!\n"
+ piv12_row_basic_1_to_0:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C+15%§!  §L->§!  §S0%§!\n"
+ piv12_row_basic_1_to_2:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C+15%§!  §L->§!  §S+30%§!\n"
+ piv12_row_basic_1_to_3:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C+15%§!  §L->§!  §S+45%§!\n"
+ piv12_row_basic_2_to_same:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C+30%§!  §L->§!  §C+30%§!\n"
+ piv12_row_basic_2_to_0:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C+30%§!  §L->§!  §S0%§!\n"
+ piv12_row_basic_2_to_1:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C+30%§!  §L->§!  §S+15%§!\n"
+ piv12_row_basic_2_to_3:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C+30%§!  §L->§!  §S+45%§!\n"
+ piv12_row_basic_3_to_same:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C+45%§!  §L->§!  §C+45%§!\n"
+ piv12_row_basic_3_to_0:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C+45%§!  §L->§!  §S0%§!\n"
+ piv12_row_basic_3_to_1:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C+45%§!  §L->§!  §S+15%§!\n"
+ piv12_row_basic_3_to_2:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C+45%§!  §L->§!  §S+30%§!\n"
+ piv12_row_basic_neg1_to_0:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C-15%§!  §L->§!  §S0%§!\n"
+ piv12_row_basic_neg1_to_1:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C-15%§!  §L->§!  §S+15%§!\n"
+ piv12_row_basic_neg1_to_2:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C-15%§!  §L->§!  §S+30%§!\n"
+ piv12_row_basic_neg1_to_3:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C-15%§!  §L->§!  §S+45%§!\n"
+ piv12_row_basic_neg2_to_0:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C-30%§!  §L->§!  §S0%§!\n"
+ piv12_row_basic_neg2_to_1:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C-30%§!  §L->§!  §S+15%§!\n"
+ piv12_row_basic_neg2_to_2:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C-30%§!  §L->§!  §S+30%§!\n"
+ piv12_row_basic_neg2_to_3:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C-30%§!  §L->§!  §S+45%§!\n"
+ piv12_row_basic_neg3_to_0:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C-45%§!  §L->§!  §S0%§!\n"
+ piv12_row_basic_neg3_to_1:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C-45%§!  §L->§!  §S+15%§!\n"
+ piv12_row_basic_neg3_to_2:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C-45%§!  §L->§!  §S+30%§!\n"
+ piv12_row_basic_neg3_to_3:0 "§H-------------------------------------------------§!\n§WBasic Resources§!  £energy£ £minerals£ £food£        §C-45%§!  §L->§!  §S+45%§!\n"
+
+ # ---- ADVANCED RESOURCES ----
+ piv12_row_adv_0_to_same:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C0%§!  §L->§!  §C0%§!\n"
+ piv12_row_adv_0_to_1:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C0%§!  §L->§!  §S+15%§!\n"
+ piv12_row_adv_0_to_2:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C0%§!  §L->§!  §S+30%§!\n"
+ piv12_row_adv_0_to_3:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C0%§!  §L->§!  §S+45%§!\n"
+ piv12_row_adv_1_to_same:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C+15%§!  §L->§!  §C+15%§!\n"
+ piv12_row_adv_1_to_0:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C+15%§!  §L->§!  §S0%§!\n"
+ piv12_row_adv_1_to_2:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C+15%§!  §L->§!  §S+30%§!\n"
+ piv12_row_adv_1_to_3:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C+15%§!  §L->§!  §S+45%§!\n"
+ piv12_row_adv_2_to_same:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C+30%§!  §L->§!  §C+30%§!\n"
+ piv12_row_adv_2_to_0:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C+30%§!  §L->§!  §S0%§!\n"
+ piv12_row_adv_2_to_1:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C+30%§!  §L->§!  §S+15%§!\n"
+ piv12_row_adv_2_to_3:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C+30%§!  §L->§!  §S+45%§!\n"
+ piv12_row_adv_3_to_same:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C+45%§!  §L->§!  §C+45%§!\n"
+ piv12_row_adv_3_to_0:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C+45%§!  §L->§!  §S0%§!\n"
+ piv12_row_adv_3_to_1:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C+45%§!  §L->§!  §S+15%§!\n"
+ piv12_row_adv_3_to_2:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C+45%§!  §L->§!  §S+30%§!\n"
+ piv12_row_adv_neg1_to_0:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C-15%§!  §L->§!  §S0%§!\n"
+ piv12_row_adv_neg1_to_1:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C-15%§!  §L->§!  §S+15%§!\n"
+ piv12_row_adv_neg1_to_2:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C-15%§!  §L->§!  §S+30%§!\n"
+ piv12_row_adv_neg1_to_3:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C-15%§!  §L->§!  §S+45%§!\n"
+ piv12_row_adv_neg2_to_0:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C-30%§!  §L->§!  §S0%§!\n"
+ piv12_row_adv_neg2_to_1:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C-30%§!  §L->§!  §S+15%§!\n"
+ piv12_row_adv_neg2_to_2:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C-30%§!  §L->§!  §S+30%§!\n"
+ piv12_row_adv_neg2_to_3:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C-30%§!  §L->§!  §S+45%§!\n"
+ piv12_row_adv_neg3_to_0:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C-45%§!  §L->§!  §S0%§!\n"
+ piv12_row_adv_neg3_to_1:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C-45%§!  §L->§!  §S+15%§!\n"
+ piv12_row_adv_neg3_to_2:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C-45%§!  §L->§!  §S+30%§!\n"
+ piv12_row_adv_neg3_to_3:0 "§H-------------------------------------------------§!\n§WAdvanced Resources§!  £alloys£ £consumer_goods£       §C-45%§!  §L->§!  §S+45%§!\n"
+
+ # ---- RESEARCH (dynamic: positive = Tax, negative = Sub — keys here are for POSITIVE proposed values) ----
+ piv12_row_res_0_to_same:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C0%§!  §L->§!  §C0%§!\n"
+ piv12_row_res_0_to_1:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C0%§!  §L->§!  §S+15%§!\n"
+ piv12_row_res_0_to_2:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C0%§!  §L->§!  §S+30%§!\n"
+ piv12_row_res_0_to_3:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C0%§!  §L->§!  §S+45%§!\n"
+ piv12_row_res_1_to_same:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+15%§!  §L->§!  §C+15%§!\n"
+ piv12_row_res_1_to_0:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+15%§!  §L->§!  §S0%§!\n"
+ piv12_row_res_1_to_2:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+15%§!  §L->§!  §S+30%§!\n"
+ piv12_row_res_1_to_3:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+15%§!  §L->§!  §S+45%§!\n"
+ piv12_row_res_2_to_same:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+30%§!  §L->§!  §C+30%§!\n"
+ piv12_row_res_2_to_0:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+30%§!  §L->§!  §S0%§!\n"
+ piv12_row_res_2_to_1:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+30%§!  §L->§!  §S+15%§!\n"
+ piv12_row_res_2_to_3:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+30%§!  §L->§!  §S+45%§!\n"
+ piv12_row_res_3_to_same:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+45%§!  §L->§!  §C+45%§!\n"
+ piv12_row_res_3_to_0:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+45%§!  §L->§!  §S0%§!\n"
+ piv12_row_res_3_to_1:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+45%§!  §L->§!  §S+15%§!\n"
+ piv12_row_res_3_to_2:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+45%§!  §L->§!  §S+30%§!\n"
+
+ # ---- STRATEGIC (dynamic: positive = Tax, negative = Sub — keys here are for POSITIVE proposed values) ----
+ piv12_row_strat_0_to_same:0 "§H-------------------------------------------------§!\n§WStrategic§!  £volatile_motes£ £exotic_gases£ £rare_crystals£ £sr_zro£ £sr_dark_matter£ £sr_living_metal£       §C0%§!  §L->§!  §C0%§!\n"
+ piv12_row_strat_0_to_1:0 "§H-------------------------------------------------§!\n§WStrategic§!  £volatile_motes£ £exotic_gases£ £rare_crystals£ £sr_zro£ £sr_dark_matter£ £sr_living_metal£       §C0%§!  §L->§!  §S+15%§!\n"
+ piv12_row_strat_1_to_same:0 "§H-------------------------------------------------§!\n§WStrategic§!  £volatile_motes£ £exotic_gases£ £rare_crystals£ £sr_zro£ £sr_dark_matter£ £sr_living_metal£       §C+15%§!  §L->§!  §C+15%§!\n"
+ piv12_row_strat_1_to_0:0 "§H-------------------------------------------------§!\n§WStrategic§!  £volatile_motes£ £exotic_gases£ £rare_crystals£ £sr_zro£ £sr_dark_matter£ £sr_living_metal£       §C+15%§!  §L->§!  §S0%§!\n"
+
+ # ---- HOLDINGS LIMIT ----
+ piv12_row_hold_0_to_same:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C0§!  §L->§!  §C0§!\n"
+ piv12_row_hold_0_to_1:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C0§!  §L->§!  §S1§!\n"
+ piv12_row_hold_0_to_2:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C0§!  §L->§!  §S2§!\n"
+ piv12_row_hold_0_to_3:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C0§!  §L->§!  §S3§!\n"
+ piv12_row_hold_0_to_4:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C0§!  §L->§!  §S4§!\n"
+ piv12_row_hold_1_to_same:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C1§!  §L->§!  §C1§!\n"
+ piv12_row_hold_1_to_0:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C1§!  §L->§!  §S0§!\n"
+ piv12_row_hold_1_to_2:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C1§!  §L->§!  §S2§!\n"
+ piv12_row_hold_1_to_3:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C1§!  §L->§!  §S3§!\n"
+ piv12_row_hold_1_to_4:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C1§!  §L->§!  §S4§!\n"
+ piv12_row_hold_2_to_same:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C2§!  §L->§!  §C2§!\n"
+ piv12_row_hold_2_to_0:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C2§!  §L->§!  §S0§!\n"
+ piv12_row_hold_2_to_1:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C2§!  §L->§!  §S1§!\n"
+ piv12_row_hold_2_to_3:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C2§!  §L->§!  §S3§!\n"
+ piv12_row_hold_2_to_4:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C2§!  §L->§!  §S4§!\n"
+ piv12_row_hold_3_to_same:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C3§!  §L->§!  §C3§!\n"
+ piv12_row_hold_3_to_0:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C3§!  §L->§!  §S0§!\n"
+ piv12_row_hold_3_to_1:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C3§!  §L->§!  §S1§!\n"
+ piv12_row_hold_3_to_2:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C3§!  §L->§!  §S2§!\n"
+ piv12_row_hold_3_to_4:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C3§!  §L->§!  §S4§!\n"
+ piv12_row_hold_4_to_same:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C4§!  §L->§!  §C4§!\n"
+ piv12_row_hold_4_to_0:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C4§!  §L->§!  §S0§!\n"
+ piv12_row_hold_4_to_1:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C4§!  §L->§!  §S1§!\n"
+ piv12_row_hold_4_to_2:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C4§!  §L->§!  §S2§!\n"
+ piv12_row_hold_4_to_3:0 "§H-------------------------------------------------§!\n§WHoldings Limit§!                §C4§!  §L->§!  §S3§!\n"
+
+ # ---- DIPLOMATIC FREEDOM ----
+ piv12_row_diplfree_0_to_same:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §CIndependent§!  §L->§!  §CIndependent§!\n"
+ piv12_row_diplfree_0_to_1:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §CIndependent§!  §L->§!  §SRestricted Voting§!\n"
+ piv12_row_diplfree_0_to_2:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §SIndependent§!  §L->§!  §SIndependent§!\n"
+ piv12_row_diplfree_0_to_3:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §SIndependent§!  §L->§!  §SIndependent§!\n"
+ piv12_row_diplfree_1_to_same:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §CRestricted Voting§!  §L->§!  §CRestricted Voting§!\n"
+ piv12_row_diplfree_1_to_0:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §CRestricted Voting§!  §L->§!  §SIndependent§!\n"
+ piv12_row_diplfree_1_to_2:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §SRestricted Voting§!  §L->§!  §SIndependent§!\n"
+ piv12_row_diplfree_1_to_3:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §SRestricted Voting§!  §L->§!  §SIndependent§!\n"
+ piv12_row_diplfree_2_to_same:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §CIndependent§!  §L->§!  §CIndependent§!\n"
+ piv12_row_diplfree_2_to_0:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §SIndependent§!  §L->§!  §SIndependent§!\n"
+ piv12_row_diplfree_2_to_1:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §SIndependent§!  §L->§!  §SRestricted Voting§!\n"
+ piv12_row_diplfree_2_to_3:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §SIndependent§!  §L->§!  §SIndependent§!\n"
+ piv12_row_diplfree_3_to_same:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §CIndependent§!  §L->§!  §CIndependent§!\n"
+ piv12_row_diplfree_3_to_0:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §SIndependent§!  §L->§!  §SIndependent§!\n"
+ piv12_row_diplfree_3_to_1:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §SIndependent§!  §L->§!  §SRestricted Voting§!\n"
+ piv12_row_diplfree_3_to_2:0 "§H-------------------------------------------------§!\n§WDiplomatic Freedom§!           §SIndependent§!  §L->§!  §SIndependent§!\n"
+
+ # ---- EXPANSION RIGHTS ----
+ piv12_row_expand_0_to_same:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §CExpansion Regulated§!  §L->§!  §CExpansion Regulated§!\n"
+ piv12_row_expand_0_to_1:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §CExpansion Regulated§!  §L->§!  §SExpansion Prohibited§!\n"
+ piv12_row_expand_0_to_2:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §CExpansion Regulated§!  §L->§!  §SFree Expansion§!\n"
+ piv12_row_expand_0_to_3:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §SExpansion Regulated§!  §L->§!  §SFree Expansion§!\n"
+ piv12_row_expand_1_to_same:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §CExpansion Prohibited§!  §L->§!  §CExpansion Prohibited§!\n"
+ piv12_row_expand_1_to_0:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §CExpansion Prohibited§!  §L->§!  §SExpansion Regulated§!\n"
+ piv12_row_expand_1_to_2:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §CExpansion Prohibited§!  §L->§!  §SFree Expansion§!\n"
+ piv12_row_expand_1_to_3:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §SExpansion Prohibited§!  §L->§!  §SFree Expansion§!\n"
+ piv12_row_expand_2_to_same:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §CFree Expansion§!  §L->§!  §CFree Expansion§!\n"
+ piv12_row_expand_2_to_0:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §CFree Expansion§!  §L->§!  §SExpansion Regulated§!\n"
+ piv12_row_expand_2_to_1:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §CFree Expansion§!  §L->§!  §SExpansion Prohibited§!\n"
+ piv12_row_expand_2_to_3:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §SFree Expansion§!  §L->§!  §SFree Expansion§!\n"
+ piv12_row_expand_3_to_same:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §CFree Expansion§!  §L->§!  §CFree Expansion§!\n"
+ piv12_row_expand_3_to_0:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §SFree Expansion§!  §L->§!  §SExpansion Regulated§!\n"
+ piv12_row_expand_3_to_1:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §SFree Expansion§!  §L->§!  §SExpansion Prohibited§!\n"
+ piv12_row_expand_3_to_2:0 "§H-------------------------------------------------§!\n§WExpansion Rights§!             §SFree Expansion§!  §L->§!  §SFree Expansion§!\n"
+
+ # ---- JOINS OVERLORD WARS ----
+ piv12_row_ovwar_0_to_same:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §COffensive Only§!  §L->§!  §COffensive Only§!\n"
+ piv12_row_ovwar_0_to_1:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §COffensive Only§!  §L->§!  §SAll Wars§!\n"
+ piv12_row_ovwar_0_to_2:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §COffensive Only§!  §L->§!  §SDefensive Only§!\n"
+ piv12_row_ovwar_0_to_3:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §SOffensive Only§!  §L->§!  §SDefensive Only§!\n"
+ piv12_row_ovwar_1_to_same:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §CAll Wars§!  §L->§!  §CAll Wars§!\n"
+ piv12_row_ovwar_1_to_0:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §CAll Wars§!  §L->§!  §SOffensive Only§!\n"
+ piv12_row_ovwar_1_to_2:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §CAll Wars§!  §L->§!  §SDefensive Only§!\n"
+ piv12_row_ovwar_1_to_3:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §SAll Wars§!  §L->§!  §SDefensive Only§!\n"
+ piv12_row_ovwar_2_to_same:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §CDefensive Only§!  §L->§!  §CDefensive Only§!\n"
+ piv12_row_ovwar_2_to_0:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §CDefensive Only§!  §L->§!  §SOffensive Only§!\n"
+ piv12_row_ovwar_2_to_1:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §CDefensive Only§!  §L->§!  §SAll Wars§!\n"
+ piv12_row_ovwar_2_to_3:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §SDefensive Only§!  §L->§!  §SDefensive Only§!\n"
+ piv12_row_ovwar_3_to_same:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §CDefensive Only§!  §L->§!  §CDefensive Only§!\n"
+ piv12_row_ovwar_3_to_0:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §SDefensive Only§!  §L->§!  §SOffensive Only§!\n"
+ piv12_row_ovwar_3_to_1:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §SDefensive Only§!  §L->§!  §SAll Wars§!\n"
+ piv12_row_ovwar_3_to_2:0 "§H-------------------------------------------------§!\n§WJoins Overlord Wars§!          §SDefensive Only§!  §L->§!  §SDefensive Only§!\n"
+
+ # ---- JOINS SUBJECT WARS ----
+ piv12_row_subwar_0_to_same:0 "§H-------------------------------------------------§!\n§WJoins Subject Wars§!           §CDefensive Only§!  §L->§!  §CDefensive Only§!\n"
+ piv12_row_subwar_0_to_other:0 "§H-------------------------------------------------§!\n§WJoins Subject Wars§!           §CDefensive Only§!  §L->§!  §SChanged§!\n"
+ piv12_row_subwar_1_to_same:0 "§H-------------------------------------------------§!\n§WJoins Subject Wars§!           §CNone§!  §L->§!  §CNone§!\n"
+ piv12_row_subwar_1_to_other:0 "§H-------------------------------------------------§!\n§WJoins Subject Wars§!           §CNone§!  §L->§!  §SDefensive Only§!\n"
+ piv12_row_subwar_2_to_same:0 "§H-------------------------------------------------§!\n§WJoins Subject Wars§!           §CDefensive Only§!  §L->§!  §CDefensive Only§!\n"
+ piv12_row_subwar_2_to_other:0 "§H-------------------------------------------------§!\n§WJoins Subject Wars§!           §CDefensive Only§!  §L->§!  §SChanged§!\n"
+ piv12_row_subwar_3_to_same:0 "§H-------------------------------------------------§!\n§WJoins Subject Wars§!           §CDefensive Only§!  §L->§!  §CDefensive Only§!\n"
+ piv12_row_subwar_3_to_other:0 "§H-------------------------------------------------§!\n§WJoins Subject Wars§!           §CDefensive Only§!  §L->§!  §SChanged§!\n"
+
+ # ---- SUBJECT INTEGRATION ----
+ piv12_row_integ_0_to_same:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §CAllowed§!  §L->§!  §CAllowed§!\n"
+ piv12_row_integ_0_to_1:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §SAllowed§!  §L->§!  §SAllowed§!\n"
+ piv12_row_integ_0_to_2:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §CAllowed§!  §L->§!  §SProhibited§!\n"
+ piv12_row_integ_0_to_3:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §SAllowed§!  §L->§!  §SProhibited§!\n"
+ piv12_row_integ_1_to_same:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §CAllowed§!  §L->§!  §CAllowed§!\n"
+ piv12_row_integ_1_to_0:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §SAllowed§!  §L->§!  §SAllowed§!\n"
+ piv12_row_integ_1_to_2:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §CAllowed§!  §L->§!  §SProhibited§!\n"
+ piv12_row_integ_1_to_3:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §SAllowed§!  §L->§!  §SProhibited§!\n"
+ piv12_row_integ_2_to_same:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §CProhibited§!  §L->§!  §CProhibited§!\n"
+ piv12_row_integ_2_to_0:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §CProhibited§!  §L->§!  §SAllowed§!\n"
+ piv12_row_integ_2_to_1:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §SProhibited§!  §L->§!  §SAllowed§!\n"
+ piv12_row_integ_2_to_3:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §SProhibited§!  §L->§!  §SProhibited§!\n"
+ piv12_row_integ_3_to_same:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §CProhibited§!  §L->§!  §CProhibited§!\n"
+ piv12_row_integ_3_to_0:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §CProhibited§!  §L->§!  §SAllowed§!\n"
+ piv12_row_integ_3_to_1:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §SProhibited§!  §L->§!  §SAllowed§!\n"
+ piv12_row_integ_3_to_2:0 "§H-------------------------------------------------§!\n§WSubject Integration§!          §SProhibited§!  §L->§!  §SProhibited§!\n"
+
+ # ---- SENSORS ----
+ piv12_row_sensor_on_to_same:0 "§H-------------------------------------------------§!\n§WSensors§!                      §CUnified Sensors§!  §L->§!  §CUnified Sensors§!\n"
+ piv12_row_sensor_on_to_off:0 "§H-------------------------------------------------§!\n§WSensors§!                      §CUnified Sensors§!  §L->§!  §SIndependent Sensors§!\n"
+ piv12_row_sensor_off_to_same:0 "§H-------------------------------------------------§!\n§WSensors§!                      §CIndependent Sensors§!  §L->§!  §CIndependent Sensors§!\n"
+ piv12_row_sensor_off_to_on:0 "§H-------------------------------------------------§!\n§WSensors§!                      §CIndependent Sensors§!  §L->§!  §SUnified Sensors§!\n"
+
+ # ---- FOOTER ----
+ piv12_footer:0 "\n§H=================================================§!\n§WAccept§!: Terms applied immediately. §Y5-year§! renegotiation lock.\n§WRefuse§!: Costs §R25 £influence£ Influence§!. Blocks proposals for §Y1 year§!.\n§H=================================================§!"
+
+ # ---- BUTTONS ----
+ piv12_accept:0 "§G£trigger_yes£ We accept the revised terms.§!"
+ piv12_accept_tt:0 "§GAccept§! the proposed agreement.\nNew terms applied immediately.\nRenegotiation blocked for §Y5 years§!."
+ piv12_reject:0 "§R£trigger_no£ We refuse.§! (§R-25 £influence£§!)"
+ piv12_reject_tt:0 "§RRefuse§! the proposal.\nCosts §R25 £influence£ Influence§!.\nBlocks new proposals for §Y1 year§!."
+
+ # ---- TEST EVENTS ----
+ piv12_test_instant_title:0 "PIV12 Instant Subject Test"
+ piv12_test_instant_desc_ok:0 "You are a subject. Forcing an immediate overlord proposal now."
+ piv12_test_instant_desc_fail:0 "You are not a subject. No proposal can be generated."
+ piv12_test_instant_ok:0 "Understood"
+
+ # =====================================================
+ # DYNAMIC RESEARCH ROWS (negative = subsidy, positive = tax)
+ # current = 0, proposed negative
+ # =====================================================
+ piv12_row_res_0_to_neg1:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C0%§!  §L->§!  §S-15%§!\n"
+ piv12_row_res_0_to_neg2:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C0%§!  §L->§!  §S-30%§!\n"
+ piv12_row_res_0_to_neg3:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C0%§!  §L->§!  §S-45%§!\n"
+ # current = 1 (tax 15%), proposed negative
+ piv12_row_res_1_to_neg1:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+15%§!  §L->§!  §S-15%§!\n"
+ piv12_row_res_1_to_neg2:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+15%§!  §L->§!  §S-30%§!\n"
+ piv12_row_res_1_to_neg3:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+15%§!  §L->§!  §S-45%§!\n"
+ # current = 2 (tax 30%), proposed negative
+ piv12_row_res_2_to_neg1:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+30%§!  §L->§!  §S-15%§!\n"
+ piv12_row_res_2_to_neg2:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+30%§!  §L->§!  §S-30%§!\n"
+ piv12_row_res_2_to_neg3:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+30%§!  §L->§!  §S-45%§!\n"
+ # current = 3 (tax 45%), proposed negative
+ piv12_row_res_3_to_neg1:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+45%§!  §L->§!  §S-15%§!\n"
+ piv12_row_res_3_to_neg2:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+45%§!  §L->§!  §S-30%§!\n"
+ piv12_row_res_3_to_neg3:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C+45%§!  §L->§!  §S-45%§!\n"
+ # current = -1 (sub 15%)
+ piv12_row_res_neg1_to_same:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-15%§!  §L->§!  §C-15%§!\n"
+ piv12_row_res_neg1_to_0:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-15%§!  §L->§!  §S0%§!\n"
+ piv12_row_res_neg1_to_1:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-15%§!  §L->§!  §S+15%§!\n"
+ piv12_row_res_neg1_to_2:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-15%§!  §L->§!  §S+30%§!\n"
+ piv12_row_res_neg1_to_3:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-15%§!  §L->§!  §S+45%§!\n"
+ piv12_row_res_neg1_to_neg2:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-15%§!  §L->§!  §S-30%§!\n"
+ piv12_row_res_neg1_to_neg3:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-15%§!  §L->§!  §S-45%§!\n"
+ # current = -2 (sub 30%)
+ piv12_row_res_neg2_to_same:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-30%§!  §L->§!  §C-30%§!\n"
+ piv12_row_res_neg2_to_0:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-30%§!  §L->§!  §S0%§!\n"
+ piv12_row_res_neg2_to_1:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-30%§!  §L->§!  §S+15%§!\n"
+ piv12_row_res_neg2_to_2:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-30%§!  §L->§!  §S+30%§!\n"
+ piv12_row_res_neg2_to_3:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-30%§!  §L->§!  §S+45%§!\n"
+ piv12_row_res_neg2_to_neg1:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-30%§!  §L->§!  §S-15%§!\n"
+ piv12_row_res_neg2_to_neg3:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-30%§!  §L->§!  §S-45%§!\n"
+ # current = -3 (sub 45%)
+ piv12_row_res_neg3_to_same:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-45%§!  §L->§!  §C-45%§!\n"
+ piv12_row_res_neg3_to_0:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-45%§!  §L->§!  §S0%§!\n"
+ piv12_row_res_neg3_to_1:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-45%§!  §L->§!  §S+15%§!\n"
+ piv12_row_res_neg3_to_2:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-45%§!  §L->§!  §S+30%§!\n"
+ piv12_row_res_neg3_to_3:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-45%§!  §L->§!  §S+45%§!\n"
+ piv12_row_res_neg3_to_neg1:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-45%§!  §L->§!  §S-15%§!\n"
+ piv12_row_res_neg3_to_neg2:0 "§H-------------------------------------------------§!\n§WResearch§!  £physics_research£ £society_research£ £engineering_research£       §C-45%§!  §L->§!  §S-30%§!\n"
+
+ # =====================================================
+ # DYNAMIC STRATEGIC ROWS (negative = subsidy, positive = tax)
+ # =====================================================
+ piv12_row_strat_0_to_neg1:0 "§H-------------------------------------------------§!\n§WStrategic§!  £volatile_motes£ £exotic_gases£ £rare_crystals£ £sr_zro£ £sr_dark_matter£ £sr_living_metal£       §C0%§!  §L->§!  §S-15%§!\n"
+ piv12_row_strat_1_to_neg1:0 "§H-------------------------------------------------§!\n§WStrategic§!  £volatile_motes£ £exotic_gases£ £rare_crystals£ £sr_zro£ £sr_dark_matter£ £sr_living_metal£       §C+15%§!  §L->§!  §S-15%§!\n"
+ piv12_row_strat_neg1_to_same:0 "§H-------------------------------------------------§!\n§WStrategic§!  £volatile_motes£ £exotic_gases£ £rare_crystals£ £sr_zro£ £sr_dark_matter£ £sr_living_metal£       §C-15%§!  §L->§!  §C-15%§!\n"
+ piv12_row_strat_neg1_to_0:0 "§H-------------------------------------------------§!\n§WStrategic§!  £volatile_motes£ £exotic_gases£ £rare_crystals£ £sr_zro£ £sr_dark_matter£ £sr_living_metal£       §C-15%§!  §L->§!  §S0%§!\n"
+ piv12_row_strat_neg1_to_1:0 "§H-------------------------------------------------§!\n§WStrategic§!  £volatile_motes£ £exotic_gases£ £rare_crystals£ £sr_zro£ £sr_dark_matter£ £sr_living_metal£       §C-15%§!  §L->§!  §S+15%§!\n"
+

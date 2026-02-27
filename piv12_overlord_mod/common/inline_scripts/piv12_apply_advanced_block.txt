@@ -1,0 +1,11 @@
+set_agreement_terms = {
+	specialist_type = $SPEC$
+	subject_diplomacy = $DIPL$
+	subject_expand = $EXP$
+	joins_overlord_wars = $OVWAR$
+	joins_subject_wars = $SUBWAR$
+	subject_integration = $INTEG$
+	subject_sensors = $SENSOR$
+	subject_holdings_limit = $HOLDINGS$
+	resource_subsidies_advanced = $ADVANCED$
+}

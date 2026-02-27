@@ -1,0 +1,479 @@
+# ===================================================================
+# PIV12 Scripted Effects
+# ===================================================================
+
+# ===================================================================
+# Read ACTUAL current agreement terms from the game's agreement object.
+# Must be called in VASSAL scope (inside every_subject).
+# Sets piv_current_* variables on the vassal.
+# ===================================================================
+piv12_read_current_agreement_terms = {
+	# Defaults
+	set_variable = { which = piv_current_spec_level value = 0 }
+	set_variable = { which = piv_current_basic value = 0 }
+	set_variable = { which = piv_current_advanced value = 0 }
+	set_variable = { which = piv_current_research value = 0 }
+	set_variable = { which = piv_current_strategic value = 0 }
+	set_variable = { which = piv_current_holdings value = 0 }
+	set_variable = { which = piv_current_diplfree value = 0 }
+	set_variable = { which = piv_current_expand value = 0 }
+	set_variable = { which = piv_current_ovwar value = 0 }
+	set_variable = { which = piv_current_subwar value = 0 }
+	set_variable = { which = piv_current_integ value = 2 }
+	set_variable = { which = piv_current_sensor value = 0 }
+
+	# ---- Read from the actual agreement with our overlord ----
+	every_agreement = {
+		limit = {
+			owner = { is_same_value = event_target:piv12_current_overlord }
+		}
+
+		# --- SPECIALIST TYPE / SUBJECT TYPE ---
+		# Use both term value and preset fallback. Some agreements can fail term match in script
+		# while still carrying the correct specialist preset.
+		if = { limit = {
+			OR = {
+				has_term_value = { term = specialist_type value = specialist_bulwark }
+				agreement_preset = preset_bulwark
+			}
+		}
+			prev = { set_variable = { which = piv_current_spec_level value = 1 } }
+		}
+		else_if = { limit = {
+			OR = {
+				has_term_value = { term = specialist_type value = specialist_prospectorium }
+				agreement_preset = preset_prospectorium
+			}
+		}
+			prev = { set_variable = { which = piv_current_spec_level value = 2 } }
+		}
+		else_if = { limit = {
+			OR = {
+				has_term_value = { term = specialist_type value = specialist_scholarium }
+				agreement_preset = preset_scholarium
+			}
+		}
+			prev = { set_variable = { which = piv_current_spec_level value = 3 } }
+		}
+		else_if = { limit = { agreement_preset = preset_subsidiary }
+			prev = { set_variable = { which = piv_current_spec_level value = 4 } }
+		}
+		# else 0 = standard vassal
+
+		# --- DIPLOMATIC FREEDOM ---
+		if = { limit = { has_term_value = { term = subject_diplomacy value = subject_can_not_do_diplomacy } }
+			prev = { set_variable = { which = piv_current_diplfree value = 2 } }
+		}
+		else_if = { limit = { has_term_value = { term = subject_diplomacy value = subject_can_do_diplomacy_but_not_vote } }
+			prev = { set_variable = { which = piv_current_diplfree value = 1 } }
+		}
+		else_if = { limit = { has_term_value = { term = subject_diplomacy value = subject_can_do_diplomacy } }
+			prev = { set_variable = { which = piv_current_diplfree value = 0 } }
+		}
+
+		# --- EXPANSION ---
+		if = { limit = { has_term_value = { term = subject_expand value = subject_cannot_expand } }
+			prev = { set_variable = { which = piv_current_expand value = 1 } }
+		}
+		else_if = { limit = { has_term_value = { term = subject_expand value = subject_can_expand } }
+			prev = { set_variable = { which = piv_current_expand value = 2 } }
+		}
+		# else 0 = tithe (default)
+
+		# --- OVERLORD WARS ---
+		if = { limit = { has_term_value = { term = joins_overlord_wars value = joins_overlord_wars_all } }
+			prev = { set_variable = { which = piv_current_ovwar value = 3 } }
+		}
+		else_if = { limit = { has_term_value = { term = joins_overlord_wars value = joins_overlord_wars_offensive } }
+			prev = { set_variable = { which = piv_current_ovwar value = 2 } }
+		}
+		else_if = { limit = { has_term_value = { term = joins_overlord_wars value = joins_overlord_wars_defensive } }
+			prev = { set_variable = { which = piv_current_ovwar value = 1 } }
+		}
+		# else 0 = none
+
+		# --- SUBJECT WARS ---
+		if = { limit = { has_term_value = { term = joins_subject_wars value = joins_subject_wars_all } }
+			prev = { set_variable = { which = piv_current_subwar value = 3 } }
+		}
+		else_if = { limit = { has_term_value = { term = joins_subject_wars value = joins_subject_wars_offensive } }
+			prev = { set_variable = { which = piv_current_subwar value = 2 } }
+		}
+		else_if = { limit = { has_term_value = { term = joins_subject_wars value = joins_subject_wars_none } }
+			prev = { set_variable = { which = piv_current_subwar value = 1 } }
+		}
+		# else 0 = defensive (default)
+
+		# --- INTEGRATION ---
+		if = { limit = { has_term_value = { term = subject_integration value = subject_can_be_integrated } }
+			prev = { set_variable = { which = piv_current_integ value = 0 } }
+		}
+		# else 2 = cannot integrate (default, set above)
+
+		# --- SENSORS ---
+		if = { limit = { has_term_value = { term = subject_sensors value = subject_does_not_get_sensors } }
+			prev = { set_variable = { which = piv_current_sensor value = 1 } }
+		}
+		# else 0 = gets sensors
+
+		# --- HOLDINGS ---
+		if = { limit = { has_term_value = { term = subject_holdings_limit value = subject_holdings_limit_4 } }
+			prev = { set_variable = { which = piv_current_holdings value = 4 } }
+		}
+		else_if = { limit = { has_term_value = { term = subject_holdings_limit value = subject_holdings_limit_3 } }
+			prev = { set_variable = { which = piv_current_holdings value = 3 } }
+		}
+		else_if = { limit = { has_term_value = { term = subject_holdings_limit value = subject_holdings_limit_2 } }
+			prev = { set_variable = { which = piv_current_holdings value = 2 } }
+		}
+		else_if = { limit = { has_term_value = { term = subject_holdings_limit value = subject_holdings_limit_1 } }
+			prev = { set_variable = { which = piv_current_holdings value = 1 } }
+		}
+		# else 0
+
+		# --- RESOURCE TERMS (SAFE SNAPSHOT) ---
+		# Numeric resource subsidy reads are not script-exposed in this build.
+		# Use last applied values to keep proposal/apply UI consistent.
+		if = {
+			# Use v2 marker so stale snapshots from broken older builds are ignored.
+			limit = { prev = { has_country_flag = piv_has_applied_contract_v2 } }
+			prev = {
+				set_variable = { which = piv_current_basic value = piv_applied_basic }
+				set_variable = { which = piv_current_advanced value = piv_applied_advanced }
+				set_variable = { which = piv_current_research value = piv_applied_research }
+				set_variable = { which = piv_current_strategic value = piv_applied_strategic }
+			}
+		}
+	}
+}
+# ===================================================================
+# Score subject loyalty attitude relative to the overlord (ROOT)
+# Call in VASSAL scope
+# ===================================================================
+piv12_score_subject_attitude_vs_root = {
+	set_variable = { which = piv_low_loyalty value = 0 }
+	set_variable = { which = piv_loyalty_band value = 2 }
+	if = {
+		limit = { opinion = { who = event_target:piv12_current_overlord value < -25 } }
+		set_variable = { which = piv_low_loyalty value = 2 }
+		set_variable = { which = piv_loyalty_band value = 0 }
+	}
+	else_if = {
+		limit = { opinion = { who = event_target:piv12_current_overlord value < 25 } }
+		set_variable = { which = piv_low_loyalty value = 1 }
+		set_variable = { which = piv_loyalty_band value = 0 }
+	}
+	else_if = {
+		limit = { opinion = { who = event_target:piv12_current_overlord value < 40 } }
+		set_variable = { which = piv_loyalty_band value = 1 }
+	}
+	else_if = {
+		limit = { opinion = { who = event_target:piv12_current_overlord value > 90 } }
+		set_variable = { which = piv_loyalty_band value = 4 }
+	}
+	else_if = {
+		limit = { opinion = { who = event_target:piv12_current_overlord value > 75 } }
+		set_variable = { which = piv_loyalty_band value = 3 }
+	}
+}
+
+# ===================================================================
+# Derive per-category proposed diplomatic variables from piv_proposed_dipl_package
+# Call AFTER piv_proposed_dipl_package is set
+# ===================================================================
+piv12_derive_proposed_diplo_terms = {
+	# Package 0 = Standard (default)
+	set_variable = { which = piv_proposed_diplfree value = 1 }
+	set_variable = { which = piv_proposed_expand value = 0 }
+	set_variable = { which = piv_proposed_ovwar value = 1 }
+	set_variable = { which = piv_proposed_subwar value = 0 }
+	set_variable = { which = piv_proposed_integ value = 2 }
+
+	# Package 1 = Tight Control (Authoritarian)
+	if = {
+		limit = { check_variable = { which = piv_proposed_dipl_package value = 1 } }
+		set_variable = { which = piv_proposed_diplfree value = 2 }
+		set_variable = { which = piv_proposed_expand value = 1 }
+		set_variable = { which = piv_proposed_ovwar value = 3 }
+		set_variable = { which = piv_proposed_subwar value = 1 }
+		set_variable = { which = piv_proposed_integ value = 0 }
+	}
+	# Package 2 = Autonomous (Egalitarian)
+	else_if = {
+		limit = { check_variable = { which = piv_proposed_dipl_package value = 2 } }
+		set_variable = { which = piv_proposed_diplfree value = 0 }
+		set_variable = { which = piv_proposed_expand value = 2 }
+		set_variable = { which = piv_proposed_ovwar value = 0 }
+		set_variable = { which = piv_proposed_subwar value = 0 }
+		set_variable = { which = piv_proposed_integ value = 2 }
+	}
+	# Package 3 = Conciliatory (Low loyalty — give more freedoms to prevent revolt)
+	else_if = {
+		limit = { check_variable = { which = piv_proposed_dipl_package value = 3 } }
+		set_variable = { which = piv_proposed_diplfree value = 0 }
+		set_variable = { which = piv_proposed_expand value = 2 }
+		set_variable = { which = piv_proposed_ovwar value = 0 }
+		set_variable = { which = piv_proposed_subwar value = 0 }
+		set_variable = { which = piv_proposed_integ value = 2 }
+	}
+}
+
+# ===================================================================
+# Cleanup - clear all temporary piv variables
+# ===================================================================
+piv12_cleanup_variables = {
+	clear_variable = piv_current_sensor
+	clear_variable = piv_proposed_sensor
+	clear_variable = piv_rejection_chance
+	clear_variable = piv_temp_diff
+	clear_variable = piv_temp_mult
+	clear_variable = piv_ai_acceptance_chance
+	clear_variable = piv_war_status
+	clear_variable = piv_has_high_intel
+	clear_variable = piv_temp_neg_accept
+	clear_variable = piv_should_change
+	clear_variable = piv_base_tax
+	clear_variable = piv_monthly_proposal_chance
+	clear_variable = piv_terms_differ
+	# Current term snapshot
+	clear_variable = piv_current_spec_level
+	clear_variable = piv_current_basic
+	clear_variable = piv_current_advanced
+	clear_variable = piv_current_research
+	clear_variable = piv_current_holdings
+	clear_variable = piv_current_strategic
+	clear_variable = piv_current_diplfree
+	clear_variable = piv_current_expand
+	clear_variable = piv_current_ovwar
+	clear_variable = piv_current_subwar
+	clear_variable = piv_current_integ
+}
+
+# ===================================================================
+# APPLY CONTRACT
+#
+# Called in VASSAL scope.
+# event_target:piv12_current_overlord MUST be set before calling.
+# All piv_tax_*, piv_spec_level, piv_holdings_level,
+# piv_proposed_diplfree/expand/ovwar/subwar/integ must be on vassal.
+#
+# RESOURCE APPLY MODE:
+#   Uses piv_tax_* proposal variables directly for each resource category
+#   so accepted terms match the proposal shown to the player.
+# ===================================================================
+piv12_apply_contract = {
+	every_agreement = {
+		limit = {
+			owner = { is_same_value = event_target:piv12_current_overlord }
+		}
+
+		# Dimensions: Spec Level (4) x Diplo Package (3 groups) x Tax Level (4) x Strategic (2)
+		# =========================================================
+		# BULWARK (Spec 1)
+		# =========================================================
+		if = { limit = { prev = { check_variable = { which = piv_spec_level value = 1 } } }
+			if = { limit = { prev = { check_variable = { which = piv_proposed_dipl_package value = 1 } } } # Tight
+				if = { limit = { prev = { check_variable = { which = piv_tax_basic value = 1 } } }
+					if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_bulwark BASIC = 0.15 ADVANCED = 0.15 RESEARCH = -0.15 STRATEGIC = -0.15 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+					}
+					else = {
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_bulwark BASIC = 0.15 ADVANCED = 0.15 RESEARCH = -0.15 STRATEGIC = 0 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+					}
+				}
+				else_if = { limit = { prev = { check_variable = { which = piv_tax_basic value = 2 } } }
+					if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_bulwark BASIC = 0.30 ADVANCED = 0.30 RESEARCH = -0.30 STRATEGIC = -0.15 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+					}
+					else = {
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_bulwark BASIC = 0.30 ADVANCED = 0.30 RESEARCH = -0.30 STRATEGIC = 0 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+					}
+				}
+				else = { # Tax 0 or higher fallback
+					if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_bulwark BASIC = 0 ADVANCED = 0 RESEARCH = 0 STRATEGIC = -0.15 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+					}
+					else = {
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_bulwark BASIC = 0 ADVANCED = 0 RESEARCH = 0 STRATEGIC = 0 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+					}
+				}
+			}
+			else_if = { limit = { prev = { OR = { check_variable = { which = piv_proposed_dipl_package value = 2 } check_variable = { which = piv_proposed_dipl_package value = 3 } } } } # Autonomous/Conciliatory
+				# Specialists usually don't get full autonomy, but if they do, use standard Spec holdings
+				if = { limit = { prev = { check_variable = { which = piv_tax_basic value = 1 } } }
+					if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_bulwark BASIC = 0.15 ADVANCED = 0.15 RESEARCH = -0.15 STRATEGIC = -0.15 DIPL = subject_can_do_diplomacy EXP = subject_can_expand OVWAR = joins_overlord_wars_none SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+					}
+					else = {
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_bulwark BASIC = 0.15 ADVANCED = 0.15 RESEARCH = -0.15 STRATEGIC = 0 DIPL = subject_can_do_diplomacy EXP = subject_can_expand OVWAR = joins_overlord_wars_none SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+					}
+				}
+				else = {
+					inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_bulwark BASIC = 0 ADVANCED = 0 RESEARCH = 0 STRATEGIC = 0 DIPL = subject_can_do_diplomacy EXP = subject_can_expand OVWAR = joins_overlord_wars_none SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+				}
+			}
+			else = { # Standard
+				if = { limit = { prev = { check_variable = { which = piv_tax_basic value = 1 } } }
+					if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_bulwark BASIC = 0.15 ADVANCED = 0.15 RESEARCH = -0.15 STRATEGIC = -0.15 DIPL = subject_can_do_diplomacy_but_not_vote EXP = subject_can_expand_with_tithe OVWAR = joins_overlord_wars_defensive SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+					}
+					else = {
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_bulwark BASIC = 0.15 ADVANCED = 0.15 RESEARCH = -0.15 STRATEGIC = 0 DIPL = subject_can_do_diplomacy_but_not_vote EXP = subject_can_expand_with_tithe OVWAR = joins_overlord_wars_defensive SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+					}
+				}
+				else_if = { limit = { prev = { check_variable = { which = piv_tax_basic value = 2 } } }
+					if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_bulwark BASIC = 0.30 ADVANCED = 0.30 RESEARCH = -0.30 STRATEGIC = -0.15 DIPL = subject_can_do_diplomacy_but_not_vote EXP = subject_can_expand_with_tithe OVWAR = joins_overlord_wars_defensive SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+					}
+					else = {
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_bulwark BASIC = 0.30 ADVANCED = 0.30 RESEARCH = -0.30 STRATEGIC = 0 DIPL = subject_can_do_diplomacy_but_not_vote EXP = subject_can_expand_with_tithe OVWAR = joins_overlord_wars_defensive SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+					}
+				}
+				else = { # Tax 0 
+					inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_bulwark BASIC = 0 ADVANCED = 0 RESEARCH = 0 STRATEGIC = 0 DIPL = subject_can_do_diplomacy_but_not_vote EXP = subject_can_expand_with_tithe OVWAR = joins_overlord_wars_defensive SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+				}
+			}
+		}
+		# =========================================================
+		# PROSPECTORIUM (Spec 2)
+		# =========================================================
+		else_if = { limit = { prev = { check_variable = { which = piv_spec_level value = 2 } } }
+			if = { limit = { prev = { check_variable = { which = piv_proposed_dipl_package value = 1 } } } # Tight
+				if = { limit = { prev = { check_variable = { which = piv_tax_basic value = 1 } } }
+					if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_prospectorium BASIC = 0.15 ADVANCED = 0.15 RESEARCH = -0.15 STRATEGIC = 0.15 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+					}
+					else = {
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_prospectorium BASIC = 0.15 ADVANCED = 0.15 RESEARCH = -0.15 STRATEGIC = 0 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+					}
+				}
+				else = {
+					inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_prospectorium BASIC = 0 ADVANCED = 0 RESEARCH = 0 STRATEGIC = 0 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+				}
+			}
+			else_if = { limit = { prev = { OR = { check_variable = { which = piv_proposed_dipl_package value = 2 } check_variable = { which = piv_proposed_dipl_package value = 3 } } } }
+				inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_prospectorium BASIC = 0 ADVANCED = 0 RESEARCH = 0 STRATEGIC = 0 DIPL = subject_can_do_diplomacy EXP = subject_can_expand OVWAR = joins_overlord_wars_none SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+			}
+			else = { # Standard
+				if = { limit = { prev = { check_variable = { which = piv_tax_basic value = 1 } } }
+					if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_prospectorium BASIC = 0.15 ADVANCED = 0.15 RESEARCH = -0.15 STRATEGIC = 0.15 DIPL = subject_can_do_diplomacy_but_not_vote EXP = subject_can_expand_with_tithe OVWAR = joins_overlord_wars_defensive SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+					}
+					else = {
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_prospectorium BASIC = 0.15 ADVANCED = 0.15 RESEARCH = -0.15 STRATEGIC = 0 DIPL = subject_can_do_diplomacy_but_not_vote EXP = subject_can_expand_with_tithe OVWAR = joins_overlord_wars_defensive SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+					}
+				}
+				else = {
+					inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_prospectorium BASIC = 0 ADVANCED = 0 RESEARCH = 0 STRATEGIC = 0 DIPL = subject_can_do_diplomacy_but_not_vote EXP = subject_can_expand_with_tithe OVWAR = joins_overlord_wars_defensive SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+				}
+			}
+		}
+		# =========================================================
+		# SCHOLARIUM (Spec 3)
+		# =========================================================
+		else_if = { limit = { prev = { check_variable = { which = piv_spec_level value = 3 } } }
+			if = { limit = { prev = { check_variable = { which = piv_proposed_dipl_package value = 1 } } } # Tight
+				inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_scholarium BASIC = 0 ADVANCED = 0 RESEARCH = 0 STRATEGIC = 0 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+			}
+			else_if = { limit = { prev = { OR = { check_variable = { which = piv_proposed_dipl_package value = 2 } check_variable = { which = piv_proposed_dipl_package value = 3 } } } }
+				inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_scholarium BASIC = 0 ADVANCED = 0 RESEARCH = 0 STRATEGIC = 0 DIPL = subject_can_do_diplomacy EXP = subject_can_expand OVWAR = joins_overlord_wars_none SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+			}
+			else = { # Standard
+				inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_scholarium BASIC = 0 ADVANCED = 0 RESEARCH = 0 STRATEGIC = 0 DIPL = subject_can_do_diplomacy_but_not_vote EXP = subject_can_expand_with_tithe OVWAR = joins_overlord_wars_defensive SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+			}
+		}
+		# =========================================================
+		# NONE (Spec 0)
+		# =========================================================
+		else = {
+			if = { limit = { prev = { check_variable = { which = piv_proposed_dipl_package value = 1 } } } # Tight
+				if = { limit = { prev = { check_variable = { which = piv_tax_basic value = 1 } } }
+					if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0.15 ADVANCED = 0.15 RESEARCH = 0.15 STRATEGIC = 0.15 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+					}
+					else = {
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0.15 ADVANCED = 0.15 RESEARCH = 0.15 STRATEGIC = 0 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+					}
+				}
+				else_if = { limit = { prev = { check_variable = { which = piv_tax_basic value = 2 } } }
+					if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0.30 ADVANCED = 0.30 RESEARCH = 0.30 STRATEGIC = 0.15 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+					}
+					else = {
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0.30 ADVANCED = 0.30 RESEARCH = 0.30 STRATEGIC = 0 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+					}
+				}
+				else_if = { limit = { prev = { check_variable = { which = piv_tax_basic value = 3 } } }
+					if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0.45 ADVANCED = 0.45 RESEARCH = 0.45 STRATEGIC = 0.15 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+					}
+					else = {
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0.45 ADVANCED = 0.45 RESEARCH = 0.45 STRATEGIC = 0 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+					}
+				}
+				else = {
+					inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0 ADVANCED = 0 RESEARCH = 0 STRATEGIC = 0 DIPL = subject_can_not_do_diplomacy EXP = subject_cannot_expand OVWAR = joins_overlord_wars_all SUBWAR = joins_subject_wars_none INTEG = subject_can_be_integrated SENSOR = subject_does_not_get_sensors HOLDINGS = subject_holdings_limit_4 }
+				}
+			}
+			else_if = { limit = { prev = { OR = { check_variable = { which = piv_proposed_dipl_package value = 2 } check_variable = { which = piv_proposed_dipl_package value = 3 } } } } # Autonomous/Conciliatory
+				if = { limit = { prev = { check_variable = { which = piv_tax_basic value = 1 } } }
+					if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0.15 ADVANCED = 0.15 RESEARCH = 0.15 STRATEGIC = 0.15 DIPL = subject_can_do_diplomacy EXP = subject_can_expand OVWAR = joins_overlord_wars_none SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_0 }
+					}
+					else = {
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0.15 ADVANCED = 0.15 RESEARCH = 0.15 STRATEGIC = 0 DIPL = subject_can_do_diplomacy EXP = subject_can_expand OVWAR = joins_overlord_wars_none SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_0 }
+					}
+				}
+				else = {
+					inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0 ADVANCED = 0 RESEARCH = 0 STRATEGIC = 0 DIPL = subject_can_do_diplomacy EXP = subject_can_expand OVWAR = joins_overlord_wars_none SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_0 }
+				}
+			}
+			else = { # Standard
+				if = { limit = { prev = { check_variable = { which = piv_tax_basic value = 1 } } }
+					if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0.15 ADVANCED = 0.15 RESEARCH = 0.15 STRATEGIC = 0.15 DIPL = subject_can_do_diplomacy_but_not_vote EXP = subject_can_expand_with_tithe OVWAR = joins_overlord_wars_defensive SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+					}
+					else = {
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0.15 ADVANCED = 0.15 RESEARCH = 0.15 STRATEGIC = 0 DIPL = subject_can_do_diplomacy_but_not_vote EXP = subject_can_expand_with_tithe OVWAR = joins_overlord_wars_defensive SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+					}
+				}
+				else_if = { limit = { prev = { check_variable = { which = piv_tax_basic value = 2 } } }
+					if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0.30 ADVANCED = 0.30 RESEARCH = 0.30 STRATEGIC = 0.15 DIPL = subject_can_do_diplomacy_but_not_vote EXP = subject_can_expand_with_tithe OVWAR = joins_overlord_wars_defensive SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+					}
+					else = {
+						inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0.30 ADVANCED = 0.30 RESEARCH = 0.30 STRATEGIC = 0 DIPL = subject_can_do_diplomacy_but_not_vote EXP = subject_can_expand_with_tithe OVWAR = joins_overlord_wars_defensive SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+					}
+				}
+				else = {
+					inline_script = { script = "piv12_apply_contract_block" SPEC = specialist_none BASIC = 0 ADVANCED = 0 RESEARCH = 0 STRATEGIC = 0 DIPL = subject_can_do_diplomacy_but_not_vote EXP = subject_can_expand_with_tithe OVWAR = joins_overlord_wars_defensive SUBWAR = joins_subject_wars_defensive INTEG = subject_can_not_be_integrated SENSOR = subject_gets_sensors HOLDINGS = subject_holdings_limit_2 }
+				}
+			}
+		}
+
+		# All 4 resources (basic/advanced/research/strategic) are set in the
+		# inline_script template above alongside discrete terms.
+	}
+
+	# Mark contract applied on this vassal
+	set_country_flag = piv_has_applied_contract
+	set_country_flag = piv_has_applied_contract_v2
+
+	# Save applied resource values (for future "current" snapshots)
+	set_variable = { which = piv_applied_basic value = piv_tax_basic }
+	set_variable = { which = piv_applied_advanced value = piv_tax_advanced }
+	set_variable = { which = piv_applied_research value = piv_tax_research }
+	set_variable = { which = piv_applied_strategic value = piv_tax_strategic }
+	set_variable = { which = piv_applied_holdings value = piv_holdings_level }
+	set_variable = { which = piv_applied_spec value = piv_spec_level }
+	set_variable = { which = piv_applied_dipl_package value = piv_proposed_dipl_package }
+	set_variable = { which = piv_applied_diplfree value = piv_proposed_diplfree }
+	set_variable = { which = piv_applied_expand value = piv_proposed_expand }
+	set_variable = { which = piv_applied_ovwar value = piv_proposed_ovwar }
+	set_variable = { which = piv_applied_subwar value = piv_proposed_subwar }
+	set_variable = { which = piv_applied_integ value = piv_proposed_integ }
+	set_variable = { which = piv_applied_sensor value = piv_proposed_sensor }
+
+	# 5-year renegotiation lock
+	set_timed_country_flag = { flag = piv_contract_recently_changed days = 1825 }
+}

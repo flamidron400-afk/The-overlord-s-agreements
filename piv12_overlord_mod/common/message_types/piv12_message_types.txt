@@ -1,0 +1,16 @@
+message_type = {
+	key = "PIV12_CONTRACT_PROPOSAL"
+	icon = "GFX_piv12_notification_icon"
+	icon_frame = 1
+
+	name = "PIV12_NOTIFICATION_TITLE"
+	sound = "diplomatic_notification"
+	ping = "ping_notification_yellow"
+
+	default_notification = yes
+	default_toast = yes
+	default_popup = no
+	default_autopause = no
+
+	category = diplomacy
+}

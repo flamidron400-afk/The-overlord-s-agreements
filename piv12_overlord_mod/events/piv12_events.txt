@@ -1,0 +1,1054 @@
+namespace = piv12
+
+# ===================================================================
+# piv12.1000 - AI Overlord Brain (Monthly Pulse)
+#
+# SCOPE MAP (inside every_subject):
+#   Active scope  = the Subject/Vassal country
+#   ROOT          = the Overlord country
+#   prev          = the Overlord (scope outside every_subject)
+#
+# FLOW:
+#   1. 25% monthly chance gate
+#   2. AI reads CURRENT agreement terms from the game
+#   3. AI evaluates situation (ethics, war, loyalty, economy, intel)
+#   4. AI calculates proposed terms
+#   5. AI compares proposed vs current — only proposes if different
+#   6. For player vassals: popup with current->proposed comparison
+#   7. For AI vassals: acceptance/rejection logic
+# ===================================================================
+
+country_event = {
+	id = piv12.1000
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		is_ai = yes
+		NOT = { is_country_type = fallen_empire }
+		NOT = { is_country_type = awakened_fallen_empire }
+		any_subject = { always = yes }
+	}
+
+	immediate = {
+		every_subject = {
+			limit = {
+				NOT = { has_country_flag = piv_contract_recently_changed }
+				NOT = { has_country_flag = rejected_contract_v12 }
+				NOT = { has_country_flag = piv_proposal_pending }
+			}
+			save_event_target_as = my_vassal
+			root = { save_event_target_as = piv12_current_overlord }
+
+			# Default monthly proposal chance
+			set_variable = { which = piv_monthly_proposal_chance value = 25 }
+
+			# =========================================================
+			# 25% monthly chance gate
+			# =========================================================
+			random = {
+				chance = piv_monthly_proposal_chance
+
+				# =========================================================
+				# STEP 1: READ CURRENT AGREEMENT TERMS FROM THE GAME
+				# This sets piv_current_* variables on the vassal
+				# =========================================================
+				piv12_read_current_agreement_terms = yes
+
+				# Score subject attitude
+				piv12_score_subject_attitude_vs_root = yes
+
+				set_variable = { which = piv_ai_acceptance_chance value = 0 }
+
+				# =========================================================
+				# STEP 2: EVALUATE SITUATION
+				# =========================================================
+
+				# PHILOSOPHY
+				set_variable = { which = piv_philosophy value = 0 }
+
+				if = {
+					limit = {
+						root = {
+							OR = {
+								has_ethic = ethic_authoritarian
+								has_ethic = ethic_fanatic_authoritarian
+							}
+						}
+					}
+					set_variable = { which = piv_philosophy value = 1 }
+				}
+				else_if = {
+					limit = {
+						root = {
+							OR = {
+								has_ethic = ethic_egalitarian
+								has_ethic = ethic_fanatic_egalitarian
+							}
+						}
+					}
+					set_variable = { which = piv_philosophy value = 2 }
+				}
+
+				# SHOULD WE CHANGE AT ALL?
+				set_variable = { which = piv_should_change value = 0 }
+				if = {
+					limit = {
+						OR = {
+							has_global_flag = crisis_active
+							has_crisis = yes
+							root = { is_at_war = yes }
+							check_variable = { which = piv_low_loyalty value >= 1 }
+							relative_power = { who = root category = all value >= equivalent }
+							relative_power = { who = root category = economy value >= equivalent }
+						}
+					}
+					set_variable = { which = piv_should_change value = 1 }
+				}
+
+				# =========================================================
+				# STEP 3: CALCULATE PROPOSED TERMS
+				# Only if should_change > 0
+				# =========================================================
+				if = {
+					limit = { check_variable = { which = piv_should_change value = 1 } }
+
+					# -------------------------------------------------
+					# SPECIALIST
+					# -------------------------------------------------
+						set_variable = { which = piv_spec_level value = piv_current_spec_level }
+
+					# Start from the current specialist level; situation rules can override it below.
+
+					# Intel check
+					set_variable = { which = piv_has_high_intel value = 0 }
+					if = {
+						limit = {
+							root = { has_intel_level = { who = event_target:my_vassal category = economy level >= 40 } }
+						}
+						set_variable = { which = piv_has_high_intel value = 1 }
+					}
+
+					# Sensor sharing
+					set_variable = { which = piv_sensor_sharing value = 0 }
+
+					# War status
+					set_variable = { which = piv_war_status value = 0 }
+					if = {
+						limit = {
+							OR = {
+								root = { is_at_war = yes }
+								event_target:my_vassal = { is_at_war = yes }
+							}
+						}
+						set_variable = { which = piv_war_status value = 1 }
+					}
+
+					# Bulwark: crisis/war/strong military vassal
+					if = {
+						limit = {
+							OR = {
+								has_global_flag = crisis_active
+								has_crisis = yes
+								root = { is_at_war = yes }
+								AND = {
+									root = { has_intel_level = { who = event_target:my_vassal category = military level >= 40 } }
+									relative_power = { who = root category = fleet value >= equivalent }
+								}
+							}
+						}
+						set_variable = { which = piv_spec_level value = 1 }
+					}
+
+					# Prospectorium: rich vassal
+					if = {
+						limit = {
+							check_variable = { which = piv_has_high_intel value = 1 }
+							relative_power = { who = root category = economy value >= equivalent }
+						}
+						set_variable = { which = piv_spec_level value = 2 }
+					}
+					# Scholarium: tech-strong vassal
+					else_if = {
+						limit = {
+							check_variable = { which = piv_has_high_intel value = 1 }
+							relative_power = { who = root category = technology value >= superior }
+						}
+						set_variable = { which = piv_spec_level value = 3 }
+					}
+
+					# -------------------------------------------------
+					# TAX LEVELS
+					# -------------------------------------------------
+					set_variable = { which = piv_base_tax value = 2 }
+					if = {
+						limit = { check_variable = { which = piv_philosophy value = 1 } }
+						set_variable = { which = piv_base_tax value = 3 }
+					}
+					if = {
+						limit = { check_variable = { which = piv_philosophy value = 2 } }
+						set_variable = { which = piv_base_tax value = 1 }
+					}
+
+					set_variable = { which = piv_tax_basic value = piv_base_tax }
+					# Advanced and research always match basic for consistency
+					set_variable = { which = piv_tax_advanced value = piv_base_tax }
+					set_variable = { which = piv_tax_research value = piv_base_tax }
+					set_variable = { which = piv_tax_strategic value = 0 }
+
+					# piv_tax_research is SIGNED: positive = overlord extracts, negative = overlord subsidizes
+					# For Bulwark, the overlord subsidizes research to keep the military vassal capable
+						if = {
+							limit = {
+								check_variable = { which = piv_spec_level value = 1 }
+								check_variable = { which = piv_tax_research value > 0 }
+							}
+							multiply_variable = { which = piv_tax_research value = -1 }
+						}
+						# Bulwarks cannot sustain advanced resource extraction in vanilla ranges.
+						if = {
+							limit = { check_variable = { which = piv_spec_level value = 1 } }
+							set_variable = { which = piv_tax_advanced value = 0 }
+						}
+						# piv_tax_strategic is SIGNED: positive = overlord extracts (0.15), negative = subsidizes, 0 = nothing
+						# (strategic remains 0 here; the extraction block below sets it to +1 when applicable)
+
+					# Overlord is struggling — demand more from vassal (raise all together)
+					if = {
+						limit = {
+							OR = {
+								root = { has_monthly_income = { resource = energy value < 0 } }
+								root = { has_monthly_income = { resource = minerals value < 0 } }
+								root = { has_monthly_income = { resource = food value < 0 } }
+								root = { has_monthly_income = { resource = alloys value < 0 } }
+								root = { has_monthly_income = { resource = consumer_goods value < 0 } }
+							}
+						}
+						change_variable = { which = piv_tax_basic value = 1 }
+						change_variable = { which = piv_tax_advanced value = 1 }
+						# Research is signed: positive = more tax, negative = subsidy
+						# For signed values, "demand more" means move TOWARD positive (reduce subsidy or increase tax)
+						change_variable = { which = piv_tax_research value = 1 }
+					}
+
+					# Vassal is rich (high intel) — extract more
+					if = {
+						limit = {
+							check_variable = { which = piv_has_high_intel value = 1 }
+						}
+						change_variable = { which = piv_tax_basic value = 1 }
+						change_variable = { which = piv_tax_advanced value = 1 }
+						# Research is signed: for subsidies (negative), "extract more" means reduce subsidy (move toward 0)
+						# For taxes (positive), it means increase tax. +1 handles both correctly.
+						change_variable = { which = piv_tax_research value = 1 }
+					}
+
+					# Vassal has strategic resources
+					if = {
+						limit = {
+							check_variable = { which = piv_has_high_intel value = 1 }
+							OR = {
+								has_monthly_income = { resource = volatile_motes value > 0 }
+								has_monthly_income = { resource = exotic_gases value > 0 }
+								has_monthly_income = { resource = rare_crystals value > 0 }
+								has_monthly_income = { resource = sr_zro value > 0 }
+								has_monthly_income = { resource = sr_dark_matter value > 0 }
+								has_monthly_income = { resource = sr_living_metal value > 0 }
+								has_monthly_income = { resource = nanites value > 0 }
+							}
+						}
+						set_variable = { which = piv_tax_strategic value = 1 }
+					}
+
+					# Vassal is struggling — reduce demands to avoid economic collapse
+					if = {
+						limit = {
+							OR = {
+								has_monthly_income = { resource = energy value < 0 }
+								has_monthly_income = { resource = minerals value < 0 }
+								has_monthly_income = { resource = food value < 0 }
+								has_monthly_income = { resource = alloys value < 0 }
+								has_monthly_income = { resource = consumer_goods value < 0 }
+							}
+						}
+						if = {
+							limit = { check_variable = { which = piv_tax_basic value > 1 } }
+							set_variable = { which = piv_tax_basic value = 1 }
+							set_variable = { which = piv_tax_advanced value = 1 }
+							# Research: if positive (tax), cap at 1. If negative (subsidy), leave it alone.
+							if = {
+								limit = { check_variable = { which = piv_tax_research value > 1 } }
+								set_variable = { which = piv_tax_research value = 1 }
+							}
+						}
+					}
+
+					# REBELLION PREVENTION — lower taxes / concede autonomy
+					if = {
+						limit = { check_variable = { which = piv_low_loyalty value = 1 } }
+						set_variable = { which = piv_tax_basic value = 1 }
+						set_variable = { which = piv_tax_advanced value = 1 }
+						# Research: if positive (tax), cap to 1. If negative (subsidy), keep it — subsidies help loyalty.
+						if = {
+							limit = { check_variable = { which = piv_tax_research value > 1 } }
+							set_variable = { which = piv_tax_research value = 1 }
+						}
+						set_variable = { which = piv_tax_strategic value = 0 }
+					}
+					if = {
+						limit = { check_variable = { which = piv_low_loyalty value = 2 } }
+						set_variable = { which = piv_tax_basic value = 0 }
+						set_variable = { which = piv_tax_advanced value = 0 }
+						# Total appeasement: remove all taxes. Keep subsidies if any.
+						if = {
+							limit = { check_variable = { which = piv_tax_research value > 0 } }
+							set_variable = { which = piv_tax_research value = 0 }
+						}
+						set_variable = { which = piv_tax_strategic value = 0 }
+					}
+
+					# CLAMP: basic/advanced 0-3, research -3..3 (signed), strategic -1..1 (signed)
+					if = { limit = { check_variable = { which = piv_tax_basic value < 0 } } set_variable = { which = piv_tax_basic value = 0 } }
+					if = { limit = { check_variable = { which = piv_tax_basic value > 3 } } set_variable = { which = piv_tax_basic value = 3 } }
+					if = { limit = { check_variable = { which = piv_tax_advanced value < 0 } } set_variable = { which = piv_tax_advanced value = 0 } }
+					if = { limit = { check_variable = { which = piv_tax_advanced value > 3 } } set_variable = { which = piv_tax_advanced value = 3 } }
+					if = { limit = { check_variable = { which = piv_tax_research value < -3 } } set_variable = { which = piv_tax_research value = -3 } }
+					if = { limit = { check_variable = { which = piv_tax_research value > 3 } } set_variable = { which = piv_tax_research value = 3 } }
+					if = { limit = { check_variable = { which = piv_tax_strategic value < -1 } } set_variable = { which = piv_tax_strategic value = -1 } }
+					if = { limit = { check_variable = { which = piv_tax_strategic value > 1 } } set_variable = { which = piv_tax_strategic value = 1 } }
+
+
+
+					# Preset-aware clamp so proposal values are actually valid/applicable.
+					# Protectorate cannot demand positive advanced/research/strategic contributions.
+					if = {
+						limit = {
+							any_agreement = {
+								owner = { is_same_value = root }
+								agreement_preset = preset_protectorate
+							}
+						}
+						set_variable = { which = piv_tax_advanced value = 0 }
+						if = { limit = { check_variable = { which = piv_tax_research value > 0 } } set_variable = { which = piv_tax_research value = 0 } }
+						if = { limit = { check_variable = { which = piv_tax_strategic value > 0 } } set_variable = { which = piv_tax_strategic value = 0 } }
+					}
+					# Prospectorium research cannot be positive.
+					else_if = {
+						limit = {
+							any_agreement = {
+								owner = { is_same_value = root }
+								agreement_preset = preset_prospectorium
+							}
+						}
+						if = { limit = { check_variable = { which = piv_tax_research value > -1 } } set_variable = { which = piv_tax_research value = -1 } }
+					}
+
+					# >>>>>>>>>> TEST OVERRIDE — REMOVE AFTER TESTING <<<<<<<<<<
+					# Forces overlord to propose 30% on basic/advanced/research, 15% on strategic
+					# Placed AFTER all preset clamps so nothing can reset these values
+					set_variable = { which = piv_tax_basic value = 2 }
+					set_variable = { which = piv_tax_advanced value = 2 }
+					set_variable = { which = piv_tax_research value = 2 }
+					set_variable = { which = piv_tax_strategic value = 1 }
+					# >>>>>>>>>> END TEST OVERRIDE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+					# -------------------------------------------------
+					# HOLDINGS LEVEL
+					# -------------------------------------------------
+					set_variable = { which = piv_holdings_level value = 2 }
+					if = {
+						limit = {
+							check_variable = { which = piv_low_loyalty value = 0 }
+							check_variable = { which = piv_philosophy value = 1 }
+						}
+						set_variable = { which = piv_holdings_level value = 4 }
+					}
+					else_if = {
+						limit = { check_variable = { which = piv_low_loyalty value = 0 } }
+						set_variable = { which = piv_holdings_level value = 3 }
+					}
+					if = { limit = { check_variable = { which = piv_holdings_level value < 0 } } set_variable = { which = piv_holdings_level value = 0 } }
+					if = { limit = { check_variable = { which = piv_holdings_level value > 4 } } set_variable = { which = piv_holdings_level value = 4 } }
+
+					# -------------------------------------------------
+					# DIPLOMATIC PACKAGE
+					# -------------------------------------------------
+					set_variable = { which = piv_proposed_dipl_package value = 0 }
+					if = {
+						limit = { check_variable = { which = piv_low_loyalty value >= 1 } }
+						set_variable = { which = piv_proposed_dipl_package value = 3 }
+					}
+					else_if = {
+						limit = { check_variable = { which = piv_philosophy value = 1 } }
+						set_variable = { which = piv_proposed_dipl_package value = 1 }
+					}
+					else_if = {
+						limit = { check_variable = { which = piv_philosophy value = 2 } }
+						set_variable = { which = piv_proposed_dipl_package value = 2 }
+					}
+
+					# -------------------------------------------------
+					# PROPOSAL REASON
+					# -------------------------------------------------
+					set_variable = { which = piv_reason value = 4 }
+					if = {
+						limit = { has_global_flag = crisis_active }
+						set_variable = { which = piv_reason value = 1 }
+					}
+					else_if = {
+						limit = { root = { is_at_war = yes } }
+						set_variable = { which = piv_reason value = 2 }
+					}
+					else_if = {
+						limit = { check_variable = { which = piv_low_loyalty value >= 1 } }
+						set_variable = { which = piv_reason value = 3 }
+					}
+					else_if = {
+						limit = {
+							check_variable = { which = piv_has_high_intel value = 1 }
+							OR = {
+								has_monthly_income = { resource = sr_zro value > 0 }
+								has_monthly_income = { resource = sr_dark_matter value > 0 }
+								has_monthly_income = { resource = sr_living_metal value > 0 }
+								has_monthly_income = { resource = exotic_gases value > 0 }
+								has_monthly_income = { resource = rare_crystals value > 0 }
+								has_monthly_income = { resource = volatile_motes value > 0 }
+								has_monthly_income = { resource = nanites value > 0 }
+							}
+						}
+						set_variable = { which = piv_reason value = 6 }
+					}
+					else_if = {
+						limit = { relative_power = { who = root category = economy value >= superior } }
+						set_variable = { which = piv_reason value = 5 }
+					}
+
+					# =========================================================
+					# STEP 4: DERIVE DIPLOMATIC TERMS
+					# =========================================================
+					piv12_derive_proposed_diplo_terms = yes
+
+					# Sensor sharing: tight control (package 1) = no sensors shared
+				set_variable = { which = piv_proposed_sensor value = 0 }
+				if = {
+					limit = { check_variable = { which = piv_proposed_dipl_package value = 1 } }
+					set_variable = { which = piv_proposed_sensor value = 1 }
+				}
+
+					# =========================================================
+					# STEP 5: COMPARE PROPOSED VS CURRENT
+					# Only fire if something actually changed
+					# =========================================================
+					set_variable = { which = piv_terms_differ value = 0 }
+
+					# Check each term category for differences
+					if = { limit = { NOT = { check_variable = { which = piv_tax_basic value = piv_current_basic } } }
+						set_variable = { which = piv_terms_differ value = 1 }
+					}
+					if = { limit = { NOT = { check_variable = { which = piv_tax_advanced value = piv_current_advanced } } }
+						set_variable = { which = piv_terms_differ value = 1 }
+					}
+					if = { limit = { NOT = { check_variable = { which = piv_tax_research value = piv_current_research } } }
+						set_variable = { which = piv_terms_differ value = 1 }
+					}
+					if = { limit = { NOT = { check_variable = { which = piv_tax_strategic value = piv_current_strategic } } }
+						set_variable = { which = piv_terms_differ value = 1 }
+					}
+					if = { limit = { NOT = { check_variable = { which = piv_holdings_level value = piv_current_holdings } } }
+						set_variable = { which = piv_terms_differ value = 1 }
+					}
+					if = { limit = { NOT = { check_variable = { which = piv_spec_level value = piv_current_spec_level } } }
+						set_variable = { which = piv_terms_differ value = 1 }
+					}
+					if = { limit = { NOT = { check_variable = { which = piv_proposed_diplfree value = piv_current_diplfree } } }
+						set_variable = { which = piv_terms_differ value = 1 }
+					}
+					if = { limit = { NOT = { check_variable = { which = piv_proposed_expand value = piv_current_expand } } }
+						set_variable = { which = piv_terms_differ value = 1 }
+					}
+					if = { limit = { NOT = { check_variable = { which = piv_proposed_ovwar value = piv_current_ovwar } } }
+						set_variable = { which = piv_terms_differ value = 1 }
+					}
+					if = { limit = { NOT = { check_variable = { which = piv_proposed_subwar value = piv_current_subwar } } }
+						set_variable = { which = piv_terms_differ value = 1 }
+					}
+					if = { limit = { NOT = { check_variable = { which = piv_proposed_integ value = piv_current_integ } } }
+						set_variable = { which = piv_terms_differ value = 1 }
+					}
+					if = { limit = { NOT = { check_variable = { which = piv_proposed_sensor value = piv_current_sensor } } }
+						set_variable = { which = piv_terms_differ value = 1 }
+					}
+
+					# =========================================================
+					# STEP 6: FIRE EVENT (only if terms actually differ)
+					# =========================================================
+					if = {
+						limit = { check_variable = { which = piv_terms_differ value = 1 } }
+
+						if = {
+							limit = { is_ai = no }
+							# Player vassal: set pending flag, fire popup chain
+							set_country_flag = piv_proposal_pending
+							country_event = { id = piv12.1001 }
+						}
+						else = {
+							country_event = { id = piv12.1003 }
+						}
+					}
+					# If no terms differ, just cleanup
+					else = {
+						piv12_cleanup_variables = yes
+					}
+
+					# Cleanup the differ variable
+					clear_variable = piv_terms_differ
+
+				} # Closes should_change IF
+
+			} # Closes Random
+			clear_variable = piv_monthly_proposal_chance
+		} # Closes every_subject
+	} # Closes immediate
+} # Closes piv12.1000
+
+
+# ===================================================================
+# piv12.1001 - Player Notification Sender (Hidden)
+#
+# SCOPE: ROOT = Player Vassal
+# Sends the notification toast. Variables already set by piv12.1000.
+# ===================================================================
+
+country_event = {
+	id = piv12.1001
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		# Fire the diplomatic popup immediately via overlord relay (sets FROM = overlord for portrait)
+		overlord = {
+			save_event_target_as = piv12_current_overlord
+			country_event = { id = piv12.1007 }
+		}
+		# Also show notification toast in the corner
+		create_message = {
+			type = "PIV12_CONTRACT_PROPOSAL"
+			localization = "PIV12_NOTIFICATION_TEXT"
+			variable = {
+				type = name
+				localization = "OVERLORD"
+				scope = overlord
+			}
+		}
+	}
+}
+
+
+# ===================================================================
+# piv12.1002 - Player Diplomatic Popup
+#
+# SCOPE: ROOT = Player Vassal, FROM = Overlord
+# Uses diplomatic = yes to render overlord portrait/room/flag
+# Opened when player left-clicks the notification or via relay
+# ===================================================================
+
+country_event = {
+	id = piv12.1002
+	is_triggered_only = yes
+	diplomatic = yes
+
+	title = piv12_event_title
+
+	picture_event_data = {
+		portrait = from
+		room = from
+		planet_background = from
+	}
+
+	desc = "piv12_event_full_desc"
+
+	# OPTION: REFUSE (RED)
+	# =========================================================
+	option = {
+		name = "piv12_reject"
+		custom_tooltip = "piv12_reject_tt"
+		trigger = {
+			has_resource = { type = influence amount >= 25 }
+		}
+		hidden_effect = {
+			add_resource = { influence = -25 }
+			set_timed_country_flag = { flag = rejected_contract_v12 days = 365 }
+			remove_country_flag = piv_proposal_pending
+			piv12_cleanup_variables = yes
+		}
+	}
+
+	# =========================================================
+	# OPTION: ACCEPT (GREEN)
+	# =========================================================
+	option = {
+		name = "piv12_accept"
+		custom_tooltip = "piv12_accept_tt"
+		hidden_effect = {
+			# Save overlord as event target for the apply effect
+			from = { save_event_target_as = piv12_current_overlord }
+
+				# Safety clamps on variables
+				if = { limit = { check_variable = { which = piv_tax_basic value < 0 } } set_variable = { which = piv_tax_basic value = 0 } }
+				if = { limit = { check_variable = { which = piv_tax_basic value > 3 } } set_variable = { which = piv_tax_basic value = 3 } }
+				if = { limit = { check_variable = { which = piv_tax_advanced value < 0 } } set_variable = { which = piv_tax_advanced value = 0 } }
+				if = { limit = { check_variable = { which = piv_tax_advanced value > 3 } } set_variable = { which = piv_tax_advanced value = 3 } }
+				if = { limit = { check_variable = { which = piv_tax_research value < -3 } } set_variable = { which = piv_tax_research value = -3 } }
+				if = { limit = { check_variable = { which = piv_tax_research value > 3 } } set_variable = { which = piv_tax_research value = 3 } }
+				if = { limit = { check_variable = { which = piv_tax_strategic value < -1 } } set_variable = { which = piv_tax_strategic value = -1 } }
+				if = { limit = { check_variable = { which = piv_tax_strategic value > 1 } } set_variable = { which = piv_tax_strategic value = 1 } }
+				# Keep accepted terms valid for the active agreement preset.
+				if = {
+					limit = {
+						any_agreement = {
+							owner = { is_same_value = event_target:piv12_current_overlord }
+							agreement_preset = preset_protectorate
+						}
+					}
+					set_variable = { which = piv_tax_advanced value = 0 }
+					if = { limit = { check_variable = { which = piv_tax_research value > 0 } } set_variable = { which = piv_tax_research value = 0 } }
+					# Strategic clamp removed — AI brain and apply tree handle strategic correctly
+				}
+				else_if = {
+					limit = {
+						any_agreement = {
+							owner = { is_same_value = event_target:piv12_current_overlord }
+							agreement_preset = preset_prospectorium
+						}
+					}
+					if = { limit = { check_variable = { which = piv_tax_research value > -1 } } set_variable = { which = piv_tax_research value = -1 } }
+				}
+				if = { limit = { NOT = { check_variable = { which = piv_holdings_level value >= 0 } } } set_variable = { which = piv_holdings_level value = 2 } }
+				if = { limit = { NOT = { check_variable = { which = piv_spec_level value >= 0 } } } set_variable = { which = piv_spec_level value = 0 } }
+
+			# Apply the contract
+			piv12_apply_contract = yes
+			remove_country_flag = piv_proposal_pending
+			piv12_cleanup_variables = yes
+		}
+	}
+}
+
+
+# ===================================================================
+# piv12.1003 - AI vs AI Contract Evaluation
+# SCOPE: ROOT = AI Vassal
+# event_target:piv12_current_overlord = Overlord
+# Variables already set on vassal by piv12.1000
+# ===================================================================
+country_event = {
+	id = piv12.1003
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		set_variable = { which = piv_rejection_chance value = 0 }
+
+		# Apply acceptance bonus
+		if = {
+			limit = { check_variable = { which = piv_ai_acceptance_chance value > 0 } }
+			set_variable = { which = piv_temp_neg_accept value = piv_ai_acceptance_chance }
+			multiply_variable = { which = piv_temp_neg_accept value = -1 }
+			change_variable = { which = piv_rejection_chance value = piv_temp_neg_accept }
+			clear_variable = piv_temp_neg_accept
+		}
+
+		# =========================================================
+		# AI considers how the proposed terms compare to current
+		# Harsher terms = higher rejection chance
+		# =========================================================
+
+		# Tax increases: each level increase adds rejection chance
+		# Basic resources increase
+		set_variable = { which = piv_temp_diff value = piv_tax_basic }
+		subtract_variable = { which = piv_temp_diff value = piv_current_basic }
+		if = { limit = { check_variable = { which = piv_temp_diff value > 0 } }
+			multiply_variable = { which = piv_temp_diff value = 10 }
+			change_variable = { which = piv_rejection_chance value = piv_temp_diff }
+		}
+		else_if = { limit = { check_variable = { which = piv_temp_diff value < 0 } }
+			multiply_variable = { which = piv_temp_diff value = -5 }
+			change_variable = { which = piv_rejection_chance value = piv_temp_diff }
+		}
+
+		# Advanced resources increase
+		set_variable = { which = piv_temp_diff value = piv_tax_advanced }
+		subtract_variable = { which = piv_temp_diff value = piv_current_advanced }
+		if = { limit = { check_variable = { which = piv_temp_diff value > 0 } }
+			multiply_variable = { which = piv_temp_diff value = 10 }
+			change_variable = { which = piv_rejection_chance value = piv_temp_diff }
+		}
+		else_if = { limit = { check_variable = { which = piv_temp_diff value < 0 } }
+			multiply_variable = { which = piv_temp_diff value = -5 }
+			change_variable = { which = piv_rejection_chance value = piv_temp_diff }
+		}
+
+		# Research increase
+		set_variable = { which = piv_temp_diff value = piv_tax_research }
+		subtract_variable = { which = piv_temp_diff value = piv_current_research }
+		if = { limit = { check_variable = { which = piv_temp_diff value > 0 } }
+			multiply_variable = { which = piv_temp_diff value = 10 }
+			change_variable = { which = piv_rejection_chance value = piv_temp_diff }
+		}
+		else_if = { limit = { check_variable = { which = piv_temp_diff value < 0 } }
+			multiply_variable = { which = piv_temp_diff value = -5 }
+			change_variable = { which = piv_rejection_chance value = piv_temp_diff }
+		}
+
+		# Strategic increase
+		set_variable = { which = piv_temp_diff value = piv_tax_strategic }
+		subtract_variable = { which = piv_temp_diff value = piv_current_strategic }
+		if = { limit = { check_variable = { which = piv_temp_diff value > 0 } }
+			change_variable = { which = piv_rejection_chance value = 15 }
+		}
+		else_if = { limit = { check_variable = { which = piv_temp_diff value < 0 } }
+			change_variable = { which = piv_rejection_chance value = -10 }
+		}
+
+		# Holdings increase is bad for vassal
+		set_variable = { which = piv_temp_diff value = piv_holdings_level }
+		subtract_variable = { which = piv_temp_diff value = piv_current_holdings }
+		if = { limit = { check_variable = { which = piv_temp_diff value > 0 } }
+			multiply_variable = { which = piv_temp_diff value = 8 }
+			change_variable = { which = piv_rejection_chance value = piv_temp_diff }
+		}
+		else_if = { limit = { check_variable = { which = piv_temp_diff value < 0 } }
+			multiply_variable = { which = piv_temp_diff value = -5 }
+			change_variable = { which = piv_rejection_chance value = piv_temp_diff }
+		}
+
+		clear_variable = piv_temp_diff
+
+		# =========================================================
+		# Situational modifiers
+		# =========================================================
+
+		# Basic resource deficit — vassal can't afford more taxes
+		if = {
+			limit = {
+				OR = {
+					has_monthly_income = { resource = energy value < 0 }
+					has_monthly_income = { resource = minerals value < 0 }
+					has_monthly_income = { resource = food value < 0 }
+				}
+			}
+			change_variable = { which = piv_rejection_chance value = 20 }
+		}
+		# Advanced resource deficit
+		if = {
+			limit = {
+				OR = {
+					has_monthly_income = { resource = alloys value < 0 }
+					has_monthly_income = { resource = consumer_goods value < 0 }
+				}
+			}
+			change_variable = { which = piv_rejection_chance value = 15 }
+		}
+
+		# Overlord philosophy
+		if = {
+			limit = { check_variable = { which = piv_philosophy value = 1 } }
+			change_variable = { which = piv_rejection_chance value = 15 }
+		}
+		else_if = {
+			limit = { check_variable = { which = piv_philosophy value = 2 } }
+			change_variable = { which = piv_rejection_chance value = -15 }
+		}
+
+		# Loyalty
+		if = {
+			limit = { check_variable = { which = piv_low_loyalty value >= 1 } }
+			change_variable = { which = piv_rejection_chance value = 30 }
+		}
+		else_if = {
+			limit = { check_variable = { which = piv_loyalty_band value = 4 } }
+			change_variable = { which = piv_rejection_chance value = -30 }
+		}
+		else_if = {
+			limit = { check_variable = { which = piv_loyalty_band value >= 3 } }
+			change_variable = { which = piv_rejection_chance value = -20 }
+		}
+		else_if = {
+			limit = { check_variable = { which = piv_loyalty_band value >= 2 } }
+			change_variable = { which = piv_rejection_chance value = -10 }
+		}
+		else_if = {
+			limit = { check_variable = { which = piv_loyalty_band value = 1 } }
+			change_variable = { which = piv_rejection_chance value = 15 }
+		}
+
+		# Relative power — vassal is weaker = more likely to accept
+		if = {
+			limit = { NOT = { relative_power = { who = event_target:piv12_current_overlord category = all value >= equivalent } } }
+			change_variable = { which = piv_rejection_chance value = -20 }
+		}
+		else_if = {
+			limit = { relative_power = { who = event_target:piv12_current_overlord category = all value >= superior } }
+			change_variable = { which = piv_rejection_chance value = 10 }
+		}
+		else_if = {
+			limit = { relative_power = { who = event_target:piv12_current_overlord category = all value >= overwhelming } }
+			change_variable = { which = piv_rejection_chance value = 20 }
+		}
+
+		# Clamp 0-100
+		if = { limit = { check_variable = { which = piv_rejection_chance value < 0 } } set_variable = { which = piv_rejection_chance value = 0 } }
+		if = { limit = { check_variable = { which = piv_rejection_chance value > 100 } } set_variable = { which = piv_rejection_chance value = 100 } }
+
+		# Decision
+		random = {
+			chance = piv_rejection_chance
+			set_timed_country_flag = { flag = rejected_contract_v12 days = 365 }
+		}
+
+		if = {
+			limit = { NOT = { has_country_flag = rejected_contract_v12 } }
+			piv12_apply_contract = yes
+		}
+
+		piv12_cleanup_variables = yes
+	}
+}
+
+
+# ===================================================================
+# piv12.1005 - Right-Click Refuse (from notification)
+#
+# SCOPE: ROOT = Player Vassal
+# Fired by right_click_event on the notification message_type
+# ===================================================================
+
+country_event = {
+	id = piv12.1005
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = piv_proposal_pending
+	}
+
+	immediate = {
+		add_resource = { influence = -25 }
+		set_timed_country_flag = { flag = rejected_contract_v12 days = 365 }
+		remove_country_flag = piv_proposal_pending
+		piv12_cleanup_variables = yes
+	}
+}
+
+
+# ===================================================================
+# piv12.1006 - Left-Click Open Popup (from notification)
+#
+# SCOPE: ROOT = Player Vassal
+# Fired by left_click_event on the notification message_type
+# Opens the diplomatic popup with overlord as FROM
+# ===================================================================
+
+country_event = {
+	id = piv12.1006
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		has_country_flag = piv_proposal_pending
+	}
+
+	immediate = {
+		overlord = {
+			save_event_target_as = piv12_current_overlord
+		}
+		# Fire the diplomatic popup - FROM = overlord
+		overlord = {
+			country_event = { id = piv12.1007 }
+		}
+	}
+}
+
+
+# ===================================================================
+# piv12.1007 - Relay: Overlord fires popup back to vassal
+#
+# SCOPE: ROOT = Overlord, FROM = Player Vassal
+# This exists so that when piv12.1002 fires, FROM = this country (overlord)
+# ===================================================================
+
+country_event = {
+	id = piv12.1007
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		from = {
+			country_event = { id = piv12.1002 }
+		}
+	}
+}
+
+
+# ===================================================================
+# piv12.2001 - Delayed resource apply: ADVANCED
+# SCOPE: ROOT = Vassal (has piv_tax_advanced variable)
+# Fired 1 day after piv12_apply_contract sets basic resource.
+# ===================================================================
+country_event = {
+	id = piv12.2001
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		overlord = { save_event_target_as = piv12_current_overlord }
+		every_agreement = {
+			limit = {
+				owner = { is_same_value = event_target:piv12_current_overlord }
+			}
+			if = { limit = { prev = { check_variable = { which = piv_tax_advanced value = 3 } } }
+				set_agreement_terms = { resource_subsidies_advanced = 0.45 }
+			}
+			else_if = { limit = { prev = { check_variable = { which = piv_tax_advanced value = 2 } } }
+				set_agreement_terms = { resource_subsidies_advanced = 0.30 }
+			}
+			else_if = { limit = { prev = { check_variable = { which = piv_tax_advanced value = 1 } } }
+				set_agreement_terms = { resource_subsidies_advanced = 0.15 }
+			}
+			else = {
+				set_agreement_terms = { resource_subsidies_advanced = 0.0 }
+			}
+		}
+		# Next: research
+		country_event = { id = piv12.2002 days = 1 }
+	}
+}
+
+# ===================================================================
+# piv12.2002 - Delayed resource apply: RESEARCH
+# ===================================================================
+country_event = {
+	id = piv12.2002
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		overlord = { save_event_target_as = piv12_current_overlord }
+		every_agreement = {
+			limit = {
+				owner = { is_same_value = event_target:piv12_current_overlord }
+			}
+			if = { limit = { prev = { check_variable = { which = piv_tax_research value = 3 } } }
+				set_agreement_terms = { resource_subsidies_research = 0.45 }
+			}
+			else_if = { limit = { prev = { check_variable = { which = piv_tax_research value = 2 } } }
+				set_agreement_terms = { resource_subsidies_research = 0.30 }
+			}
+			else_if = { limit = { prev = { check_variable = { which = piv_tax_research value = 1 } } }
+				set_agreement_terms = { resource_subsidies_research = 0.15 }
+			}
+			else_if = { limit = { prev = { check_variable = { which = piv_tax_research value = -1 } } }
+				set_agreement_terms = { resource_subsidies_research = -0.15 }
+			}
+			else_if = { limit = { prev = { check_variable = { which = piv_tax_research value = -2 } } }
+				set_agreement_terms = { resource_subsidies_research = -0.30 }
+			}
+			else_if = { limit = { prev = { check_variable = { which = piv_tax_research value = -3 } } }
+				set_agreement_terms = { resource_subsidies_research = -0.45 }
+			}
+			else = {
+				set_agreement_terms = { resource_subsidies_research = 0.0 }
+			}
+		}
+		# Next: strategic
+		country_event = { id = piv12.2003 days = 1 }
+	}
+}
+
+# ===================================================================
+# piv12.2003 - Delayed resource apply: STRATEGIC
+# ===================================================================
+country_event = {
+	id = piv12.2003
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		overlord = { save_event_target_as = piv12_current_overlord }
+		every_agreement = {
+			limit = {
+				owner = { is_same_value = event_target:piv12_current_overlord }
+			}
+			if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = 1 } } }
+				set_agreement_terms = { resource_subsidies_strategic = 0.15 }
+			}
+			else_if = { limit = { prev = { check_variable = { which = piv_tax_strategic value = -1 } } }
+				set_agreement_terms = { resource_subsidies_strategic = -0.15 }
+			}
+			else = {
+				set_agreement_terms = { resource_subsidies_strategic = 0.0 }
+			}
+		}
+	}
+}
+
+
+# ===================================================================
+# Console test: event piv12.9008
+# Full-flow test: sets all 4 resources, fires popup, Accept goes through piv12_apply_contract
+# ===================================================================
+country_event = {
+	id = piv12.9008
+	is_triggered_only = yes
+	picture = "GFX_evt_alien_nature"
+	title = piv12_test_instant_title
+	desc = {
+		trigger = { is_subject = yes }
+		text = piv12_test_instant_desc_ok
+	}
+	desc = {
+		trigger = { NOT = { is_subject = yes } }
+		text = piv12_test_instant_desc_fail
+	}
+	option = {
+		name = piv12_test_instant_ok
+		hidden_effect = {
+			if = {
+				limit = { is_subject = yes }
+
+				# Save overlord reference
+				overlord = { save_event_target_as = piv12_current_overlord }
+
+				# ── Read current terms (same as normal flow) ──
+				piv12_read_current_agreement_terms = yes
+
+				# ── Force proposed values for ALL 4 resource categories ──
+				set_variable = { which = piv_tax_basic value = 2 }       # 30% tax
+				set_variable = { which = piv_tax_advanced value = 2 }    # 30% tax
+				set_variable = { which = piv_tax_research value = 2 }    # 30% tax
+				set_variable = { which = piv_tax_strategic value = 1 }   # 15% tax
+
+				# ── Non-resource proposed terms ──
+				set_variable = { which = piv_spec_level value = 0 }
+				set_variable = { which = piv_proposed_dipl_package value = 0 }
+				set_variable = { which = piv_holdings_level value = 2 }
+				set_variable = { which = piv_proposed_diplfree value = 1 }
+				set_variable = { which = piv_proposed_expand value = 1 }
+				set_variable = { which = piv_proposed_ovwar value = 1 }
+				set_variable = { which = piv_proposed_subwar value = 1 }
+				set_variable = { which = piv_proposed_integ value = 0 }
+				set_variable = { which = piv_proposed_sensor value = 0 }
+				set_variable = { which = piv_reason value = 4 }
+
+				# ── Fire popup through the proper chain ──
+				set_country_flag = piv_proposal_pending
+				# Fire relay through overlord so FROM = overlord in piv12.1002
+				overlord = {
+					save_event_target_as = piv12_current_overlord
+					country_event = { id = piv12.1007 }
+				}
+			}
+		}
+	}
+}
+

@@ -1,0 +1,350 @@
+# ===================================================================
+# PIV12 Scripted Localization
+# ===================================================================
+
+# REASON (Flavor text)
+defined_text = {
+	name = GetPiv12Reason
+	text = {
+		trigger = { check_variable = { which = piv_reason value = 1 } }
+		localization_key = piv12_desc_crisis
+	}
+	text = {
+		trigger = { check_variable = { which = piv_reason value = 2 } }
+		localization_key = piv12_desc_war
+	}
+	text = {
+		trigger = { check_variable = { which = piv_reason value = 3 } }
+		localization_key = piv12_desc_loyalty
+	}
+	text = {
+		trigger = { check_variable = { which = piv_reason value = 5 } }
+		localization_key = piv12_desc_rich
+	}
+	text = {
+		trigger = { check_variable = { which = piv_reason value = 6 } }
+		localization_key = piv12_desc_strategic
+	}
+	text = {
+		trigger = { check_variable = { which = piv_reason value = 4 } }
+		localization_key = piv12_desc_opt
+	}
+}
+
+# For ultimate efficiency and to handle the Cyan/Orange logic per-term,
+# we should define a key for each ROW that picks the correct "Current -> Proposed" line from l_english.
+
+# BASIC RESOURCES ROW
+defined_text = {
+	name = GetPiv12BasicRow
+	text = { trigger = { check_variable = { which = piv_current_basic value = 0 } check_variable = { which = piv_tax_basic value = 0 } } localization_key = piv12_row_basic_0_to_same }
+	text = { trigger = { check_variable = { which = piv_current_basic value = 0 } check_variable = { which = piv_tax_basic value = 1 } } localization_key = piv12_row_basic_0_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = 0 } check_variable = { which = piv_tax_basic value = 2 } } localization_key = piv12_row_basic_0_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = 0 } check_variable = { which = piv_tax_basic value = 3 } } localization_key = piv12_row_basic_0_to_3 }
+	# (repeat pattern for current = 1, 2, 3)
+	text = { trigger = { check_variable = { which = piv_current_basic value = 1 } check_variable = { which = piv_tax_basic value = 1 } } localization_key = piv12_row_basic_1_to_same }
+	text = { trigger = { check_variable = { which = piv_current_basic value = 1 } check_variable = { which = piv_tax_basic value = 0 } } localization_key = piv12_row_basic_1_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = 1 } check_variable = { which = piv_tax_basic value = 2 } } localization_key = piv12_row_basic_1_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = 1 } check_variable = { which = piv_tax_basic value = 3 } } localization_key = piv12_row_basic_1_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = 2 } check_variable = { which = piv_tax_basic value = 2 } } localization_key = piv12_row_basic_2_to_same }
+	text = { trigger = { check_variable = { which = piv_current_basic value = 2 } check_variable = { which = piv_tax_basic value = 0 } } localization_key = piv12_row_basic_2_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = 2 } check_variable = { which = piv_tax_basic value = 1 } } localization_key = piv12_row_basic_2_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = 2 } check_variable = { which = piv_tax_basic value = 3 } } localization_key = piv12_row_basic_2_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = 3 } check_variable = { which = piv_tax_basic value = 3 } } localization_key = piv12_row_basic_3_to_same }
+	text = { trigger = { check_variable = { which = piv_current_basic value = 3 } check_variable = { which = piv_tax_basic value = 0 } } localization_key = piv12_row_basic_3_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = 3 } check_variable = { which = piv_tax_basic value = 1 } } localization_key = piv12_row_basic_3_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = 3 } check_variable = { which = piv_tax_basic value = 2 } } localization_key = piv12_row_basic_3_to_2 }
+	# current = -1/-2/-3 (subsidy in existing agreements), proposed 0..3
+	text = { trigger = { check_variable = { which = piv_current_basic value = -1 } check_variable = { which = piv_tax_basic value = 0 } } localization_key = piv12_row_basic_neg1_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = -1 } check_variable = { which = piv_tax_basic value = 1 } } localization_key = piv12_row_basic_neg1_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = -1 } check_variable = { which = piv_tax_basic value = 2 } } localization_key = piv12_row_basic_neg1_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = -1 } check_variable = { which = piv_tax_basic value = 3 } } localization_key = piv12_row_basic_neg1_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = -2 } check_variable = { which = piv_tax_basic value = 0 } } localization_key = piv12_row_basic_neg2_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = -2 } check_variable = { which = piv_tax_basic value = 1 } } localization_key = piv12_row_basic_neg2_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = -2 } check_variable = { which = piv_tax_basic value = 2 } } localization_key = piv12_row_basic_neg2_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = -2 } check_variable = { which = piv_tax_basic value = 3 } } localization_key = piv12_row_basic_neg2_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = -3 } check_variable = { which = piv_tax_basic value = 0 } } localization_key = piv12_row_basic_neg3_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = -3 } check_variable = { which = piv_tax_basic value = 1 } } localization_key = piv12_row_basic_neg3_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = -3 } check_variable = { which = piv_tax_basic value = 2 } } localization_key = piv12_row_basic_neg3_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_basic value = -3 } check_variable = { which = piv_tax_basic value = 3 } } localization_key = piv12_row_basic_neg3_to_3 }
+}
+
+# ADVANCED RESOURCES ROW
+defined_text = {
+	name = GetPiv12AdvRow
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 0 } check_variable = { which = piv_tax_advanced value = 0 } } localization_key = piv12_row_adv_0_to_same }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 0 } check_variable = { which = piv_tax_advanced value = 1 } } localization_key = piv12_row_adv_0_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 0 } check_variable = { which = piv_tax_advanced value = 2 } } localization_key = piv12_row_adv_0_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 0 } check_variable = { which = piv_tax_advanced value = 3 } } localization_key = piv12_row_adv_0_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 1 } check_variable = { which = piv_tax_advanced value = 1 } } localization_key = piv12_row_adv_1_to_same }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 1 } check_variable = { which = piv_tax_advanced value = 0 } } localization_key = piv12_row_adv_1_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 1 } check_variable = { which = piv_tax_advanced value = 2 } } localization_key = piv12_row_adv_1_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 1 } check_variable = { which = piv_tax_advanced value = 3 } } localization_key = piv12_row_adv_1_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 2 } check_variable = { which = piv_tax_advanced value = 2 } } localization_key = piv12_row_adv_2_to_same }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 2 } check_variable = { which = piv_tax_advanced value = 0 } } localization_key = piv12_row_adv_2_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 2 } check_variable = { which = piv_tax_advanced value = 1 } } localization_key = piv12_row_adv_2_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 2 } check_variable = { which = piv_tax_advanced value = 3 } } localization_key = piv12_row_adv_2_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 3 } check_variable = { which = piv_tax_advanced value = 3 } } localization_key = piv12_row_adv_3_to_same }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 3 } check_variable = { which = piv_tax_advanced value = 0 } } localization_key = piv12_row_adv_3_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 3 } check_variable = { which = piv_tax_advanced value = 1 } } localization_key = piv12_row_adv_3_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = 3 } check_variable = { which = piv_tax_advanced value = 2 } } localization_key = piv12_row_adv_3_to_2 }
+	# current = -1/-2/-3 (subsidy in existing agreements), proposed 0..3
+	text = { trigger = { check_variable = { which = piv_current_advanced value = -1 } check_variable = { which = piv_tax_advanced value = 0 } } localization_key = piv12_row_adv_neg1_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = -1 } check_variable = { which = piv_tax_advanced value = 1 } } localization_key = piv12_row_adv_neg1_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = -1 } check_variable = { which = piv_tax_advanced value = 2 } } localization_key = piv12_row_adv_neg1_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = -1 } check_variable = { which = piv_tax_advanced value = 3 } } localization_key = piv12_row_adv_neg1_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = -2 } check_variable = { which = piv_tax_advanced value = 0 } } localization_key = piv12_row_adv_neg2_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = -2 } check_variable = { which = piv_tax_advanced value = 1 } } localization_key = piv12_row_adv_neg2_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = -2 } check_variable = { which = piv_tax_advanced value = 2 } } localization_key = piv12_row_adv_neg2_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = -2 } check_variable = { which = piv_tax_advanced value = 3 } } localization_key = piv12_row_adv_neg2_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = -3 } check_variable = { which = piv_tax_advanced value = 0 } } localization_key = piv12_row_adv_neg3_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = -3 } check_variable = { which = piv_tax_advanced value = 1 } } localization_key = piv12_row_adv_neg3_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = -3 } check_variable = { which = piv_tax_advanced value = 2 } } localization_key = piv12_row_adv_neg3_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_advanced value = -3 } check_variable = { which = piv_tax_advanced value = 3 } } localization_key = piv12_row_adv_neg3_to_3 }
+}
+
+# RESEARCH ROW — signed: positive = tax (extract), negative = subsidy (give)
+defined_text = {
+	name = GetPiv12ResRow
+	# current = 0, proposed positive (tax)
+	text = { trigger = { check_variable = { which = piv_current_research value = 0 } check_variable = { which = piv_tax_research value = 0 } } localization_key = piv12_row_res_0_to_same }
+	text = { trigger = { check_variable = { which = piv_current_research value = 0 } check_variable = { which = piv_tax_research value = 1 } } localization_key = piv12_row_res_0_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 0 } check_variable = { which = piv_tax_research value = 2 } } localization_key = piv12_row_res_0_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 0 } check_variable = { which = piv_tax_research value = 3 } } localization_key = piv12_row_res_0_to_3 }
+	# current = 0, proposed negative (subsidy)
+	text = { trigger = { check_variable = { which = piv_current_research value = 0 } check_variable = { which = piv_tax_research value = -1 } } localization_key = piv12_row_res_0_to_neg1 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 0 } check_variable = { which = piv_tax_research value = -2 } } localization_key = piv12_row_res_0_to_neg2 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 0 } check_variable = { which = piv_tax_research value = -3 } } localization_key = piv12_row_res_0_to_neg3 }
+	# current = 1 (tax 15%)
+	text = { trigger = { check_variable = { which = piv_current_research value = 1 } check_variable = { which = piv_tax_research value = 1 } } localization_key = piv12_row_res_1_to_same }
+	text = { trigger = { check_variable = { which = piv_current_research value = 1 } check_variable = { which = piv_tax_research value = 0 } } localization_key = piv12_row_res_1_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 1 } check_variable = { which = piv_tax_research value = 2 } } localization_key = piv12_row_res_1_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 1 } check_variable = { which = piv_tax_research value = 3 } } localization_key = piv12_row_res_1_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 1 } check_variable = { which = piv_tax_research value = -1 } } localization_key = piv12_row_res_1_to_neg1 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 1 } check_variable = { which = piv_tax_research value = -2 } } localization_key = piv12_row_res_1_to_neg2 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 1 } check_variable = { which = piv_tax_research value = -3 } } localization_key = piv12_row_res_1_to_neg3 }
+	# current = 2 (tax 30%)
+	text = { trigger = { check_variable = { which = piv_current_research value = 2 } check_variable = { which = piv_tax_research value = 2 } } localization_key = piv12_row_res_2_to_same }
+	text = { trigger = { check_variable = { which = piv_current_research value = 2 } check_variable = { which = piv_tax_research value = 0 } } localization_key = piv12_row_res_2_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 2 } check_variable = { which = piv_tax_research value = 1 } } localization_key = piv12_row_res_2_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 2 } check_variable = { which = piv_tax_research value = 3 } } localization_key = piv12_row_res_2_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 2 } check_variable = { which = piv_tax_research value = -1 } } localization_key = piv12_row_res_2_to_neg1 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 2 } check_variable = { which = piv_tax_research value = -2 } } localization_key = piv12_row_res_2_to_neg2 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 2 } check_variable = { which = piv_tax_research value = -3 } } localization_key = piv12_row_res_2_to_neg3 }
+	# current = 3 (tax 45%)
+	text = { trigger = { check_variable = { which = piv_current_research value = 3 } check_variable = { which = piv_tax_research value = 3 } } localization_key = piv12_row_res_3_to_same }
+	text = { trigger = { check_variable = { which = piv_current_research value = 3 } check_variable = { which = piv_tax_research value = 0 } } localization_key = piv12_row_res_3_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 3 } check_variable = { which = piv_tax_research value = 1 } } localization_key = piv12_row_res_3_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 3 } check_variable = { which = piv_tax_research value = 2 } } localization_key = piv12_row_res_3_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 3 } check_variable = { which = piv_tax_research value = -1 } } localization_key = piv12_row_res_3_to_neg1 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 3 } check_variable = { which = piv_tax_research value = -2 } } localization_key = piv12_row_res_3_to_neg2 }
+	text = { trigger = { check_variable = { which = piv_current_research value = 3 } check_variable = { which = piv_tax_research value = -3 } } localization_key = piv12_row_res_3_to_neg3 }
+	# current = -1 (subsidy 15%)
+	text = { trigger = { check_variable = { which = piv_current_research value = -1 } check_variable = { which = piv_tax_research value = -1 } } localization_key = piv12_row_res_neg1_to_same }
+	text = { trigger = { check_variable = { which = piv_current_research value = -1 } check_variable = { which = piv_tax_research value = 0 } } localization_key = piv12_row_res_neg1_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -1 } check_variable = { which = piv_tax_research value = 1 } } localization_key = piv12_row_res_neg1_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -1 } check_variable = { which = piv_tax_research value = 2 } } localization_key = piv12_row_res_neg1_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -1 } check_variable = { which = piv_tax_research value = 3 } } localization_key = piv12_row_res_neg1_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -1 } check_variable = { which = piv_tax_research value = -2 } } localization_key = piv12_row_res_neg1_to_neg2 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -1 } check_variable = { which = piv_tax_research value = -3 } } localization_key = piv12_row_res_neg1_to_neg3 }
+	# current = -2 (subsidy 30%)
+	text = { trigger = { check_variable = { which = piv_current_research value = -2 } check_variable = { which = piv_tax_research value = -2 } } localization_key = piv12_row_res_neg2_to_same }
+	text = { trigger = { check_variable = { which = piv_current_research value = -2 } check_variable = { which = piv_tax_research value = 0 } } localization_key = piv12_row_res_neg2_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -2 } check_variable = { which = piv_tax_research value = 1 } } localization_key = piv12_row_res_neg2_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -2 } check_variable = { which = piv_tax_research value = 2 } } localization_key = piv12_row_res_neg2_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -2 } check_variable = { which = piv_tax_research value = 3 } } localization_key = piv12_row_res_neg2_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -2 } check_variable = { which = piv_tax_research value = -1 } } localization_key = piv12_row_res_neg2_to_neg1 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -2 } check_variable = { which = piv_tax_research value = -3 } } localization_key = piv12_row_res_neg2_to_neg3 }
+	# current = -3 (subsidy 45%)
+	text = { trigger = { check_variable = { which = piv_current_research value = -3 } check_variable = { which = piv_tax_research value = -3 } } localization_key = piv12_row_res_neg3_to_same }
+	text = { trigger = { check_variable = { which = piv_current_research value = -3 } check_variable = { which = piv_tax_research value = 0 } } localization_key = piv12_row_res_neg3_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -3 } check_variable = { which = piv_tax_research value = 1 } } localization_key = piv12_row_res_neg3_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -3 } check_variable = { which = piv_tax_research value = 2 } } localization_key = piv12_row_res_neg3_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -3 } check_variable = { which = piv_tax_research value = 3 } } localization_key = piv12_row_res_neg3_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -3 } check_variable = { which = piv_tax_research value = -1 } } localization_key = piv12_row_res_neg3_to_neg1 }
+	text = { trigger = { check_variable = { which = piv_current_research value = -3 } check_variable = { which = piv_tax_research value = -2 } } localization_key = piv12_row_res_neg3_to_neg2 }
+}
+
+# STRATEGIC ROW — signed: positive = tax (extract), negative = subsidy (give)
+defined_text = {
+	name = GetPiv12StratRow
+	text = { trigger = { check_variable = { which = piv_current_strategic value = 0 } check_variable = { which = piv_tax_strategic value = 0 } } localization_key = piv12_row_strat_0_to_same }
+	text = { trigger = { check_variable = { which = piv_current_strategic value = 0 } check_variable = { which = piv_tax_strategic value = 1 } } localization_key = piv12_row_strat_0_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_strategic value = 0 } check_variable = { which = piv_tax_strategic value = -1 } } localization_key = piv12_row_strat_0_to_neg1 }
+	text = { trigger = { check_variable = { which = piv_current_strategic value = 1 } check_variable = { which = piv_tax_strategic value = 1 } } localization_key = piv12_row_strat_1_to_same }
+	text = { trigger = { check_variable = { which = piv_current_strategic value = 1 } check_variable = { which = piv_tax_strategic value = 0 } } localization_key = piv12_row_strat_1_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_strategic value = 1 } check_variable = { which = piv_tax_strategic value = -1 } } localization_key = piv12_row_strat_1_to_neg1 }
+	text = { trigger = { check_variable = { which = piv_current_strategic value = -1 } check_variable = { which = piv_tax_strategic value = -1 } } localization_key = piv12_row_strat_neg1_to_same }
+	text = { trigger = { check_variable = { which = piv_current_strategic value = -1 } check_variable = { which = piv_tax_strategic value = 0 } } localization_key = piv12_row_strat_neg1_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_strategic value = -1 } check_variable = { which = piv_tax_strategic value = 1 } } localization_key = piv12_row_strat_neg1_to_1 }
+}
+
+# HOLDINGS ROW
+defined_text = {
+	name = GetPiv12HoldRow
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 0 } check_variable = { which = piv_holdings_level value = 0 } } localization_key = piv12_row_hold_0_to_same }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 0 } check_variable = { which = piv_holdings_level value = 1 } } localization_key = piv12_row_hold_0_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 0 } check_variable = { which = piv_holdings_level value = 2 } } localization_key = piv12_row_hold_0_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 0 } check_variable = { which = piv_holdings_level value = 3 } } localization_key = piv12_row_hold_0_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 0 } check_variable = { which = piv_holdings_level value = 4 } } localization_key = piv12_row_hold_0_to_4 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 1 } check_variable = { which = piv_holdings_level value = 1 } } localization_key = piv12_row_hold_1_to_same }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 1 } check_variable = { which = piv_holdings_level value = 0 } } localization_key = piv12_row_hold_1_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 1 } check_variable = { which = piv_holdings_level value = 2 } } localization_key = piv12_row_hold_1_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 1 } check_variable = { which = piv_holdings_level value = 3 } } localization_key = piv12_row_hold_1_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 1 } check_variable = { which = piv_holdings_level value = 4 } } localization_key = piv12_row_hold_1_to_4 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 2 } check_variable = { which = piv_holdings_level value = 2 } } localization_key = piv12_row_hold_2_to_same }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 2 } check_variable = { which = piv_holdings_level value = 0 } } localization_key = piv12_row_hold_2_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 2 } check_variable = { which = piv_holdings_level value = 1 } } localization_key = piv12_row_hold_2_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 2 } check_variable = { which = piv_holdings_level value = 3 } } localization_key = piv12_row_hold_2_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 2 } check_variable = { which = piv_holdings_level value = 4 } } localization_key = piv12_row_hold_2_to_4 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 3 } check_variable = { which = piv_holdings_level value = 3 } } localization_key = piv12_row_hold_3_to_same }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 3 } check_variable = { which = piv_holdings_level value = 0 } } localization_key = piv12_row_hold_3_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 3 } check_variable = { which = piv_holdings_level value = 1 } } localization_key = piv12_row_hold_3_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 3 } check_variable = { which = piv_holdings_level value = 2 } } localization_key = piv12_row_hold_3_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 3 } check_variable = { which = piv_holdings_level value = 4 } } localization_key = piv12_row_hold_3_to_4 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 4 } check_variable = { which = piv_holdings_level value = 4 } } localization_key = piv12_row_hold_4_to_same }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 4 } check_variable = { which = piv_holdings_level value = 0 } } localization_key = piv12_row_hold_4_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 4 } check_variable = { which = piv_holdings_level value = 1 } } localization_key = piv12_row_hold_4_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 4 } check_variable = { which = piv_holdings_level value = 2 } } localization_key = piv12_row_hold_4_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_holdings value = 4 } check_variable = { which = piv_holdings_level value = 3 } } localization_key = piv12_row_hold_4_to_3 }
+}
+
+# DIPLOMATIC FREEDOM ROW
+defined_text = {
+	name = GetPiv12DiplFreeRow
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 0 } check_variable = { which = piv_proposed_diplfree value = 0 } } localization_key = piv12_row_diplfree_0_to_same }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 0 } check_variable = { which = piv_proposed_diplfree value = 1 } } localization_key = piv12_row_diplfree_0_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 0 } check_variable = { which = piv_proposed_diplfree value = 2 } } localization_key = piv12_row_diplfree_0_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 0 } check_variable = { which = piv_proposed_diplfree value = 3 } } localization_key = piv12_row_diplfree_0_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 1 } check_variable = { which = piv_proposed_diplfree value = 1 } } localization_key = piv12_row_diplfree_1_to_same }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 1 } check_variable = { which = piv_proposed_diplfree value = 0 } } localization_key = piv12_row_diplfree_1_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 1 } check_variable = { which = piv_proposed_diplfree value = 2 } } localization_key = piv12_row_diplfree_1_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 1 } check_variable = { which = piv_proposed_diplfree value = 3 } } localization_key = piv12_row_diplfree_1_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 2 } check_variable = { which = piv_proposed_diplfree value = 2 } } localization_key = piv12_row_diplfree_2_to_same }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 2 } check_variable = { which = piv_proposed_diplfree value = 0 } } localization_key = piv12_row_diplfree_2_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 2 } check_variable = { which = piv_proposed_diplfree value = 1 } } localization_key = piv12_row_diplfree_2_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 2 } check_variable = { which = piv_proposed_diplfree value = 3 } } localization_key = piv12_row_diplfree_2_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 3 } check_variable = { which = piv_proposed_diplfree value = 3 } } localization_key = piv12_row_diplfree_3_to_same }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 3 } check_variable = { which = piv_proposed_diplfree value = 0 } } localization_key = piv12_row_diplfree_3_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 3 } check_variable = { which = piv_proposed_diplfree value = 1 } } localization_key = piv12_row_diplfree_3_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_diplfree value = 3 } check_variable = { which = piv_proposed_diplfree value = 2 } } localization_key = piv12_row_diplfree_3_to_2 }
+}
+
+# EXPANSION RIGHTS ROW
+defined_text = {
+	name = GetPiv12ExpandRow
+	text = { trigger = { check_variable = { which = piv_current_expand value = 0 } check_variable = { which = piv_proposed_expand value = 0 } } localization_key = piv12_row_expand_0_to_same }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 0 } check_variable = { which = piv_proposed_expand value = 1 } } localization_key = piv12_row_expand_0_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 0 } check_variable = { which = piv_proposed_expand value = 2 } } localization_key = piv12_row_expand_0_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 0 } check_variable = { which = piv_proposed_expand value = 3 } } localization_key = piv12_row_expand_0_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 1 } check_variable = { which = piv_proposed_expand value = 1 } } localization_key = piv12_row_expand_1_to_same }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 1 } check_variable = { which = piv_proposed_expand value = 0 } } localization_key = piv12_row_expand_1_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 1 } check_variable = { which = piv_proposed_expand value = 2 } } localization_key = piv12_row_expand_1_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 1 } check_variable = { which = piv_proposed_expand value = 3 } } localization_key = piv12_row_expand_1_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 2 } check_variable = { which = piv_proposed_expand value = 2 } } localization_key = piv12_row_expand_2_to_same }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 2 } check_variable = { which = piv_proposed_expand value = 0 } } localization_key = piv12_row_expand_2_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 2 } check_variable = { which = piv_proposed_expand value = 1 } } localization_key = piv12_row_expand_2_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 2 } check_variable = { which = piv_proposed_expand value = 3 } } localization_key = piv12_row_expand_2_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 3 } check_variable = { which = piv_proposed_expand value = 3 } } localization_key = piv12_row_expand_3_to_same }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 3 } check_variable = { which = piv_proposed_expand value = 0 } } localization_key = piv12_row_expand_3_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 3 } check_variable = { which = piv_proposed_expand value = 1 } } localization_key = piv12_row_expand_3_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_expand value = 3 } check_variable = { which = piv_proposed_expand value = 2 } } localization_key = piv12_row_expand_3_to_2 }
+}
+
+# OVERLORD WARS ROW
+defined_text = {
+	name = GetPiv12OvWarRow
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 0 } check_variable = { which = piv_proposed_ovwar value = 0 } } localization_key = piv12_row_ovwar_0_to_same }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 0 } check_variable = { which = piv_proposed_ovwar value = 1 } } localization_key = piv12_row_ovwar_0_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 0 } check_variable = { which = piv_proposed_ovwar value = 2 } } localization_key = piv12_row_ovwar_0_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 0 } check_variable = { which = piv_proposed_ovwar value = 3 } } localization_key = piv12_row_ovwar_0_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 1 } check_variable = { which = piv_proposed_ovwar value = 1 } } localization_key = piv12_row_ovwar_1_to_same }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 1 } check_variable = { which = piv_proposed_ovwar value = 0 } } localization_key = piv12_row_ovwar_1_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 1 } check_variable = { which = piv_proposed_ovwar value = 2 } } localization_key = piv12_row_ovwar_1_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 1 } check_variable = { which = piv_proposed_ovwar value = 3 } } localization_key = piv12_row_ovwar_1_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 2 } check_variable = { which = piv_proposed_ovwar value = 2 } } localization_key = piv12_row_ovwar_2_to_same }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 2 } check_variable = { which = piv_proposed_ovwar value = 0 } } localization_key = piv12_row_ovwar_2_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 2 } check_variable = { which = piv_proposed_ovwar value = 1 } } localization_key = piv12_row_ovwar_2_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 2 } check_variable = { which = piv_proposed_ovwar value = 3 } } localization_key = piv12_row_ovwar_2_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 3 } check_variable = { which = piv_proposed_ovwar value = 3 } } localization_key = piv12_row_ovwar_3_to_same }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 3 } check_variable = { which = piv_proposed_ovwar value = 0 } } localization_key = piv12_row_ovwar_3_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 3 } check_variable = { which = piv_proposed_ovwar value = 1 } } localization_key = piv12_row_ovwar_3_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_ovwar value = 3 } check_variable = { which = piv_proposed_ovwar value = 2 } } localization_key = piv12_row_ovwar_3_to_2 }
+}
+
+# SUBJECT WARS ROW
+defined_text = {
+	name = GetPiv12SubWarRow
+	text = { trigger = { check_variable = { which = piv_current_subwar value = 0 } check_variable = { which = piv_proposed_subwar value = 0 } } localization_key = piv12_row_subwar_0_to_same }
+	text = { trigger = { check_variable = { which = piv_current_subwar value = 0 } NOT = { check_variable = { which = piv_proposed_subwar value = 0 } } } localization_key = piv12_row_subwar_0_to_other }
+	text = { trigger = { check_variable = { which = piv_current_subwar value = 1 } check_variable = { which = piv_proposed_subwar value = 1 } } localization_key = piv12_row_subwar_1_to_same }
+	text = { trigger = { check_variable = { which = piv_current_subwar value = 1 } NOT = { check_variable = { which = piv_proposed_subwar value = 1 } } } localization_key = piv12_row_subwar_1_to_other }
+	text = { trigger = { check_variable = { which = piv_current_subwar value = 2 } check_variable = { which = piv_proposed_subwar value = 2 } } localization_key = piv12_row_subwar_2_to_same }
+	text = { trigger = { check_variable = { which = piv_current_subwar value = 2 } NOT = { check_variable = { which = piv_proposed_subwar value = 2 } } } localization_key = piv12_row_subwar_2_to_other }
+	text = { trigger = { check_variable = { which = piv_current_subwar value = 3 } check_variable = { which = piv_proposed_subwar value = 3 } } localization_key = piv12_row_subwar_3_to_same }
+	text = { trigger = { check_variable = { which = piv_current_subwar value = 3 } NOT = { check_variable = { which = piv_proposed_subwar value = 3 } } } localization_key = piv12_row_subwar_3_to_other }
+}
+
+# INTEGRATION ROW
+defined_text = {
+	name = GetPiv12IntegRow
+	text = { trigger = { check_variable = { which = piv_current_integ value = 0 } check_variable = { which = piv_proposed_integ value = 0 } } localization_key = piv12_row_integ_0_to_same }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 0 } check_variable = { which = piv_proposed_integ value = 1 } } localization_key = piv12_row_integ_0_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 0 } check_variable = { which = piv_proposed_integ value = 2 } } localization_key = piv12_row_integ_0_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 0 } check_variable = { which = piv_proposed_integ value = 3 } } localization_key = piv12_row_integ_0_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 1 } check_variable = { which = piv_proposed_integ value = 1 } } localization_key = piv12_row_integ_1_to_same }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 1 } check_variable = { which = piv_proposed_integ value = 0 } } localization_key = piv12_row_integ_1_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 1 } check_variable = { which = piv_proposed_integ value = 2 } } localization_key = piv12_row_integ_1_to_2 }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 1 } check_variable = { which = piv_proposed_integ value = 3 } } localization_key = piv12_row_integ_1_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 2 } check_variable = { which = piv_proposed_integ value = 2 } } localization_key = piv12_row_integ_2_to_same }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 2 } check_variable = { which = piv_proposed_integ value = 0 } } localization_key = piv12_row_integ_2_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 2 } check_variable = { which = piv_proposed_integ value = 1 } } localization_key = piv12_row_integ_2_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 2 } check_variable = { which = piv_proposed_integ value = 3 } } localization_key = piv12_row_integ_2_to_3 }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 3 } check_variable = { which = piv_proposed_integ value = 3 } } localization_key = piv12_row_integ_3_to_same }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 3 } check_variable = { which = piv_proposed_integ value = 0 } } localization_key = piv12_row_integ_3_to_0 }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 3 } check_variable = { which = piv_proposed_integ value = 1 } } localization_key = piv12_row_integ_3_to_1 }
+	text = { trigger = { check_variable = { which = piv_current_integ value = 3 } check_variable = { which = piv_proposed_integ value = 2 } } localization_key = piv12_row_integ_3_to_2 }
+}
+
+# SENSOR ROW
+defined_text = {
+	name = GetPiv12SensorRow
+	text = { trigger = { check_variable = { which = piv_current_sensor value = 0 } check_variable = { which = piv_proposed_sensor value = 0 } } localization_key = piv12_row_sensor_on_to_same }
+	text = { trigger = { check_variable = { which = piv_current_sensor value = 0 } check_variable = { which = piv_proposed_sensor value = 1 } } localization_key = piv12_row_sensor_on_to_off }
+	text = { trigger = { check_variable = { which = piv_current_sensor value = 1 } check_variable = { which = piv_proposed_sensor value = 1 } } localization_key = piv12_row_sensor_off_to_same }
+	text = { trigger = { check_variable = { which = piv_current_sensor value = 1 } check_variable = { which = piv_proposed_sensor value = 0 } } localization_key = piv12_row_sensor_off_to_on }
+}
+
+# SPECIALIZATION ROW
+defined_text = {
+	name = GetPiv12SpecRow
+	# None
+	text = { trigger = { check_variable = { which = piv_current_spec_level value = 0 } check_variable = { which = piv_spec_level value = 0 } } localization_key = piv12_spec_none_current_c }
+	text = { trigger = { check_variable = { which = piv_current_spec_level value = 0 } NOT = { check_variable = { which = piv_spec_level value = 0 } } } localization_key = piv12_spec_none_current_y }
+	# Bulwark
+	text = { trigger = { check_variable = { which = piv_current_spec_level value = 1 } check_variable = { which = piv_spec_level value = 1 } } localization_key = piv12_spec_bulwark_current_c }
+	text = { trigger = { check_variable = { which = piv_current_spec_level value = 1 } NOT = { check_variable = { which = piv_spec_level value = 1 } } } localization_key = piv12_spec_bulwark_current_y }
+	# Prospectorium
+	text = { trigger = { check_variable = { which = piv_current_spec_level value = 2 } check_variable = { which = piv_spec_level value = 2 } } localization_key = piv12_spec_prosp_current_c }
+	text = { trigger = { check_variable = { which = piv_current_spec_level value = 2 } NOT = { check_variable = { which = piv_spec_level value = 2 } } } localization_key = piv12_spec_prosp_current_y }
+	# Scholarium
+	text = { trigger = { check_variable = { which = piv_current_spec_level value = 3 } check_variable = { which = piv_spec_level value = 3 } } localization_key = piv12_spec_schol_current_c }
+	text = { trigger = { check_variable = { which = piv_current_spec_level value = 3 } NOT = { check_variable = { which = piv_spec_level value = 3 } } } localization_key = piv12_spec_schol_current_y }
+	# Subsidiary
+	text = { trigger = { check_variable = { which = piv_current_spec_level value = 4 } check_variable = { which = piv_spec_level value = 4 } } localization_key = piv12_spec_subsidiary_current_c }
+	text = { trigger = { check_variable = { which = piv_current_spec_level value = 4 } NOT = { check_variable = { which = piv_spec_level value = 4 } } } localization_key = piv12_spec_subsidiary_current_y }
+}
+
+defined_text = {
+	name = GetPiv12SpecProposed
+	text = { trigger = { check_variable = { which = piv_spec_level value = 0 } check_variable = { which = piv_spec_level value = piv_current_spec_level } } localization_key = piv12_spec_none_proposed_c }
+	text = { trigger = { check_variable = { which = piv_spec_level value = 0 } NOT = { check_variable = { which = piv_spec_level value = piv_current_spec_level } } } localization_key = piv12_spec_none_proposed_y }
+	text = { trigger = { check_variable = { which = piv_spec_level value = 1 } check_variable = { which = piv_spec_level value = piv_current_spec_level } } localization_key = piv12_spec_bulwark_proposed_c }
+	text = { trigger = { check_variable = { which = piv_spec_level value = 1 } NOT = { check_variable = { which = piv_spec_level value = piv_current_spec_level } } } localization_key = piv12_spec_bulwark_proposed_y }
+	text = { trigger = { check_variable = { which = piv_spec_level value = 2 } check_variable = { which = piv_spec_level value = piv_current_spec_level } } localization_key = piv12_spec_prosp_proposed_c }
+	text = { trigger = { check_variable = { which = piv_spec_level value = 2 } NOT = { check_variable = { which = piv_spec_level value = piv_current_spec_level } } } localization_key = piv12_spec_prosp_proposed_y }
+	text = { trigger = { check_variable = { which = piv_spec_level value = 3 } check_variable = { which = piv_spec_level value = piv_current_spec_level } } localization_key = piv12_spec_schol_proposed_c }
+	text = { trigger = { check_variable = { which = piv_spec_level value = 3 } NOT = { check_variable = { which = piv_spec_level value = piv_current_spec_level } } } localization_key = piv12_spec_schol_proposed_y }
+	text = { trigger = { check_variable = { which = piv_spec_level value = 4 } check_variable = { which = piv_spec_level value = piv_current_spec_level } } localization_key = piv12_spec_subsidiary_proposed_c }
+	text = { trigger = { check_variable = { which = piv_spec_level value = 4 } NOT = { check_variable = { which = piv_spec_level value = piv_current_spec_level } } } localization_key = piv12_spec_subsidiary_proposed_y }
+}
